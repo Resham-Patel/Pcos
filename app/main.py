@@ -1,11 +1,11 @@
 from fastapi import FastAPI
+from app.routes import auth_routes
+from app.database import Base, engine
 
-app = FastAPI(
-    title="PCOS Detection System",
-    description="AI-powered PCOS monitoring backend",
-    version="1.0"
-)
+app = FastAPI()
 
-@app.get("/")
-def home():
-    return {"message": "PCOS backend running"}
+# Create tables
+Base.metadata.create_all(bind=engine)
+
+# Include routes
+app.include_router(auth_routes.router)
