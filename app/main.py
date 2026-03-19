@@ -1,7 +1,10 @@
 from fastapi import FastAPI
-from app.routes import auth_routes
-from app.database import Base, engine, SessionLocal
+from app.database import Base, engine
 from app.models.user_model import User
+from app.models.symptom_model import Symptoms
+from app.models.prediction_model import Prediction
+from app.models.chat_model import Chat
+from app.routes.auth_routes import router as auth_router
 
 app = FastAPI()
 
@@ -12,11 +15,4 @@ Base.metadata.create_all(bind=engine)
 def home():
     return {"message": "DB Connected"}
 
-@app.get("/test-db")
-def test_db():
-    db = SessionLocal()
-    new_user = User(email="test@gmail.com", password="1234")
-    db.add(new_user)
-    db.commit()
-    db.close()
-    return {"message": "Inserted"}
+app.include_router(auth_router)
