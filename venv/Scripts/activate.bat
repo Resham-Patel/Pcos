@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\RESHAM\OneDrive\Desktop\programs\pcos\PCOS\venv
+set VIRTUAL_ENV=C:\Users\RESHAM\OneDrive\Desktop\programs\pcos_Copy\pcos\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
