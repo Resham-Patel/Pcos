@@ -1,22 +1,21 @@
 from app.ml.predict import predict
 from app.models.prediction_model import Prediction
-from app.database import SessionLocal
 
-def predict_pcos(data):
-    db = SessionLocal()
+def predict_pcos(db, user_id, data):
+    
     prediction, confidence = predict(data)
 
-    # store in DB
-    db_prediction = Prediction(
-        # user_id=user_id,
-        prediction_result=str(prediction),
+    record = Prediction(
+        user_id=user_id,
+        input_data=data.dict(),
+        prediction=int(prediction),
         confidence=float(confidence)
     )
-    db.add(db_prediction)
-    db.commit()
-    db.refresh(db_prediction)
 
+    db.add(record)
+    db.commit()
+    
     return {
-        "prediction": int(prediction),
-        "confidence": float(confidence)
+        "prediction": "PCOS Detected" if prediction == 1 else "No PCOS",
+        "confidence": round(confidence * 100, 2)
     }
