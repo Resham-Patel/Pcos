@@ -4,11 +4,12 @@ from app.models.prediction_model import Prediction
 def predict_pcos(db, user_id, data):
     
     prediction, confidence = predict(data)
-
+    
+    result_text = "PCOS Detected" if prediction == 1 else "No PCOS"
+    
     record = Prediction(
         user_id=user_id,
-        input_data=data.dict(),
-        prediction=int(prediction),
+        prediction_result=result_text,
         confidence=float(confidence)
     )
 
@@ -16,6 +17,6 @@ def predict_pcos(db, user_id, data):
     db.commit()
     
     return {
-        "prediction": "PCOS Detected" if prediction == 1 else "No PCOS",
+        "prediction": int(prediction),   # ✅ return int (matches schema)
         "confidence": round(confidence * 100, 2)
     }
