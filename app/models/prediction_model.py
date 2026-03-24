@@ -10,5 +10,7 @@ class Prediction(Base):
 
     prediction_result = Column(String)
     confidence = Column(Float)
+    
+    recommendation = Column(String)  # ✅ NEW FIELD
 
     created_at = Column(DateTime,default=lambda: datetime.now(timezone.utc))

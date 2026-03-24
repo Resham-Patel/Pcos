@@ -8,3 +8,4 @@ python-jose[cryptography] # JWT token creation and verification
 pydantic                 # Data validation for request/response schemas
 pandas                   # Data manipulation for ML
 scikit-learn             # Machine learning algorithms
+openai                   # OpenAI API client

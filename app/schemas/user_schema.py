@@ -12,3 +12,10 @@ class UserResponse(BaseModel):
 
     class Config:
         orm_mode = True
+        
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str

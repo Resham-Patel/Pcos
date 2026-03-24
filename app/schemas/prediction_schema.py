@@ -19,3 +19,7 @@ class PredictionRequest(BaseModel):
 class PredictionResponse(BaseModel):
     prediction: int
     confidence: float
+    recommendation: str   # ✅ NEW FIELD
+    
+    class Config:
+        from_attributes = True
