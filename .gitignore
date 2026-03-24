@@ -4,3 +4,4 @@ venv/
 *.pkl
 *.csv
 *.xlsx
+.env
