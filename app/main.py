@@ -8,7 +8,12 @@ from app.routes.auth_routes import router as auth_router
 from app.routes.prediction_routes import router as prediction_router
 from app.routes.symptom_routes import router as symptom_router
 from app.routes import recommendation_routes
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 app = FastAPI()
 

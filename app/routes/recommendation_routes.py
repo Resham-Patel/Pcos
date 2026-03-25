@@ -8,3 +8,13 @@ def generate_recommendation(data: dict):
     prediction = data.get("prediction", 0)
 
     return get_recommendation(data, prediction)
+
+
+
+# {
+#   "prediction": 1,
+#   "fast_food": true,
+#   "exercise": false,
+#   "cycle": true,
+#   "pimples": true
+# }
