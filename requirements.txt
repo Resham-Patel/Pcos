@@ -1,0 +1,12 @@
+fastapi                  # Web framework for building APIs
+uvicorn                  # ASGI server to run FastAPI
+sqlalchemy               # ORM to work with PostgreSQL
+psycopg2-binary          # PostgreSQL database driver
+python-dotenv            # Load environment variables from .env
+passlib[bcrypt]          # Password hashing
+python-jose[cryptography] # JWT token creation and verification
+pydantic                 # Data validation for request/response schemas
+pandas                   # Data manipulation for ML
+scikit-learn             # Machine learning algorithms
+openai                   # OpenAI API client
+google-genai      # Google Generative AI client
