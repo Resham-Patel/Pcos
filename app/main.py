@@ -9,6 +9,7 @@ from app.routes.prediction_routes import router as prediction_router
 from app.routes.symptom_routes import router as symptom_router
 from app.routes import recommendation_routes
 import os
+from fastapi.middleware.cors import CORSMiddleware   # <-- Add this
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -16,6 +17,14 @@ load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 app = FastAPI()
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # ⚠️ In production, replace "*" with your frontend origin
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Create tables
 Base.metadata.create_all(bind=engine)

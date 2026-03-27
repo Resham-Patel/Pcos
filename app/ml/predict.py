@@ -5,19 +5,19 @@ import numpy as np
 with open("app/ml/models/pcos_model.pkl", "rb") as f:
     model = pickle.load(f)
 
-def predict(data):
+def predict(data):   # data is now a dict
     input_data = np.array([[
-        data.age,
-        data.weight,
-        data.height,
-        data.bmi,
-        data.fast_food,
-        data.exercise,
-        data.cycle,
-        data.hair_growth,
-        data.skin_darkening,
-        data.hair_loss,
-        data.pimples
+        data["age"],
+        data["weight"],
+        data["height"],
+        data["bmi"],
+        data["fast_food"],
+        data["exercise"],
+        data["cycle"],
+        data["hair_growth"],
+        data["skin_darkening"],
+        data["hair_loss"],
+        data["pimples"]
     ]])
 
     prediction = model.predict(input_data)[0]

@@ -17,7 +17,12 @@ def get_db():
 
 @router.post("/register", response_model=UserResponse)
 def register(user: UserCreate, db: Session = Depends(get_db)):
-    return register_user(db, user.name, user.email, user.password)
+    new_user = register_user(db, user.name, user.email, user.password)
+
+    if not new_user:
+        raise HTTPException(status_code=400, detail="User already exists")
+
+    return new_user
 
 
 @router.post("/login", response_model=TokenResponse)

@@ -18,16 +18,16 @@ def generate_rules(symptoms, prediction):
     if prediction == 1:
         rules.append("High chance of PCOS")
 
-    if symptoms.get("fast_food"):
+    if symptoms["fast_food"]:
         rules.append("Reduce fast food intake")
 
-    if not symptoms.get("exercise"):
+    if not symptoms["exercise"]:
         rules.append("Start regular exercise")
 
-    if symptoms.get("cycle"):
+    if symptoms["cycle"]:
         rules.append("Monitor menstrual cycle")
 
-    if symptoms.get("pimples"):
+    if symptoms["pimples"]:
         rules.append("Maintain skincare and diet")
 
     return rules

@@ -4,20 +4,22 @@ from app.models.prediction_model import Prediction
 from app.services.recommendation_service import get_recommendation
 
 def predict_pcos(db, user_id, data):
+    data_dict = data.dict()  # ✅ convert model to dict
     # Step 1: ML Prediction
-    prediction, confidence = predict(data)
+    prediction, confidence = predict(data_dict)
+    recommendation = get_recommendation(data_dict, prediction)
 
     result_text = "PCOS Detected" if prediction == 1 else "No PCOS"
 
     # Step 2: Generate Recommendation
-    recommendation = get_recommendation(data, prediction)
+    # recommendation = get_recommendation(data, prediction)
 
     # Step 3: Save to DB
     record = Prediction(
         user_id=user_id,
         prediction_result=result_text,
         confidence=float(confidence),
-         recommendation=json.dumps(recommendation)     # ✅ NEW FIELD (make sure column exists)
+        recommendation=json.dumps(recommendation)     # ✅ NEW FIELD (make sure column exists)
     )
 
     db.add(record)
