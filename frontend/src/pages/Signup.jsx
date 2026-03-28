@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/signup.css';
 
-const Login = () => {
+const Signup = () => {
   return (
     <div className="auth-page-wrapper">
       <div className="auth-card">
@@ -29,19 +29,23 @@ const Login = () => {
             <p className="subtitle">Access your personalized wellness tracking and AI guidance.</p>
 
             <form className="login-form">
-                
+                <div className="input-field">
+                <label>Name</label>
+                <input type="email" placeholder="Sarah Doe" />
+              </div>
               <div className="input-field">
                 <label>Email Address</label>
                 <input type="email" placeholder="name@example.com" />
               </div>
 
-             <div className="input-field">
+              <div className="input-field">
                 <div className="label-row">
                   <label>Password</label>
-                  <a href="#" className="forgot-link">FORGOT?</a>
+
                 </div>
                 <div className="password-input-wrapper">
-                  <input type="password" placeholder="Password" />
+                  <input type="password" placeholder="password" />
+        
                 </div>
               </div>
 
@@ -53,7 +57,7 @@ const Login = () => {
             </form>
 
             <p className="switch-auth">
-              Don't have an account? <a href="/signup">Signup</a>
+              Already have an account? <a href="/login">Login</a>
             </p>
           </div>
         </div>
@@ -72,4 +76,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

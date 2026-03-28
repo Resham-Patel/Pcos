@@ -6,34 +6,30 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="nav-logo">
-        <Link to="/">Fem<span>Well</span></Link>
+        <Link to="/" className="logo-container">
+          <img src="/logo.png" alt="FemWell Logo" className="logo-img" />
+          <span className="logo-text">Fem<span>Well</span></span>
+        </Link>
       </div>
 
       <ul className="nav-links">
-        <li>
-          <NavLink to="/awareness" className={({ isActive }) => (isActive ? 'active' : '')}>
-            Awareness
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/predict" className={({ isActive }) => (isActive ? 'active' : '')}>
-            Prediction
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/tracking" className={({ isActive }) => (isActive ? 'active' : '')}>
-            Tracking
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/chat" className={({ isActive }) => (isActive ? 'active' : '')}>
-            AI Chat
-          </NavLink>
-        </li>
+        {/* NavLink automatically manages the 'active' class for styling */}
+        <li><NavLink to="/awareness">Awareness</NavLink></li>
+        <li><NavLink to="/predict">Prediction</NavLink></li>
+        <li><NavLink to="/tracking">Tracking</NavLink></li>
+        <li><NavLink to="/chat">AI Chat</NavLink></li>
       </ul>
 
       <div className="nav-actions">
-        <Link to="/register" className="signup-btn">Sign Up</Link>
+        {/* Login Button - Navigates to Signup/Login page */}
+        <Link to="/login" className="btn-login">
+          Login
+        </Link>
+
+        {/* Sign Up Button - Primary Action */}
+        <Link to="/signup" className="btn-signup">
+          Sign up
+        </Link>
       </div>
     </nav>
   );

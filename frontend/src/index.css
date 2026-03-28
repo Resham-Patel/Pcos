@@ -55,11 +55,10 @@ body {
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
+  width: 100%; /* Change from 1126px to 100% */
+  margin: 0;
   text-align: center;
-  border-inline: 1px solid var(--border);
+  /* Remove border-inline if you don't want those side lines */
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -108,4 +107,14 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1; /* Pushes footer to the bottom on every page */
 }

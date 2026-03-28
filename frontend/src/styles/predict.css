@@ -1,0 +1,418 @@
+/* --- Predict Page Container --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.predict-container {
+  padding: 40px 5% 80px 5%;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* --- Header Section --- */
+.predict-header {
+  text-align: center;
+  padding-bottom: 60px;
+  width: 100%;
+}
+
+.predict-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+  letter-spacing: -1.5px;
+}
+
+.pink-text {
+  color: #c94c72;
+  display: inline-block;
+}
+
+.predict-header p {
+  color: #666;
+  line-height: 1.7;
+  font-size: 1.1rem;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+/* --- The Form Card --- */
+.form-card {
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  border-radius: 32px;
+  padding: 40px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.04);
+  margin-bottom: 50px;
+}
+
+.form-section {
+  margin-bottom: 45px;
+}
+
+.form-section h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #1a1a1a;
+}
+
+/* --- Input Grid (Vital Metrics) --- */
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 10px;
+  margin-left: 4px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+  background: #f9f9f9;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #c94c72;
+  background: #fff;
+}
+
+.readonly-input {
+  background: #f0f0f0 !important;
+  color: #c94c72 !important;
+  font-weight: 800 !important;
+  border: 1px dashed #d0d0d0 !important;
+  cursor: not-allowed;
+}
+
+/* --- Toggle Groups (Clinical & Lifestyle) --- */
+.toggle-grid, .toggle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Fixed space between rows to prevent overlap */
+}
+
+.toggle-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9f9f9;
+  padding: 18px 25px;
+  border-radius: 16px;
+  transition: 0.3s ease;
+}
+
+.toggle-group:hover {
+  background: #f3f3f3;
+}
+
+.toggle-group span {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #444;
+}
+
+/* --- Modern Toggle Switch --- */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0; /* Prevents toggle from squishing */
+}
+
+.switch input { opacity: 0; width: 0; height: 0; }
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #e0e0e0;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+input:checked + .slider { background-color: #c94c72; }
+input:checked + .slider:before { transform: translateX(22px); }
+
+/* --- Submit Button --- */
+.predict-btn {
+  width: 100%;
+  padding: 20px;
+  background: #c94c72;
+  color: white;
+  border: none;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin: 20px 0 40px 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(201, 76, 114, 0.2);
+}
+
+.predict-btn:hover {
+  background: #b03d60;
+  transform: translateY(-2px);
+}
+
+/* --- Results Section (New) --- */
+.results-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  border-top: 1px solid #eee;
+  padding-top: 40px;
+}
+
+.result-card {
+  border: 2px solid #fceef2;
+  border-radius: 28px;
+  padding: 30px;
+  background: white;
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.status-badge {
+  background: #fdf2f8;
+  color: #db2777;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.outcome-box {
+  background: #f8f9fa;
+  border-left: 5px solid #c94c72;
+  border-radius: 20px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+  transition: all 0.3s ease;
+}
+
+.outcome-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.outcome-label { color: #666; font-size: 0.9rem; margin: 0; }
+.outcome-value { color: #1a1a1a; font-size: 1.8rem; margin: 0; font-weight: 800; }
+
+.suggestions-list ul { list-style: none; padding: 0; }
+.suggestions-list li {
+  display: flex;
+  gap: 12px;
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+
+/* --- Premium Recommendation CTA --- */
+.recommendation-cta {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px); /* Frosty glass effect */
+  border: 1px solid rgba(201, 76, 114, 0.2);
+  border-radius: 32px;
+  padding: 45px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  margin-top: 40px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(201, 76, 114, 0.1);
+}
+
+/* Moving Background Glow Animation */
+.recommendation-cta::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(201, 76, 114, 0.05) 0%, transparent 60%);
+  animation: rotateGlow 12s linear infinite;
+  z-index: 0;
+}
+
+@keyframes rotateGlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.cta-content {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+/* Small label above the heading */
+.cta-content::before {
+  content: "TAILORED FOR YOU";
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #c94c72;
+  margin-bottom: 12px;
+}
+
+.cta-content h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+  color: #1a1a1a;
+  background: linear-gradient(90deg, #1a1a1a, #c94c72);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cta-content p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+  max-width: 450px;
+}
+
+/* --- Premium Action Button --- */
+.view-rec-btn {
+  position: relative;
+  z-index: 1;
+  background: #1a1a1a;
+  color: white;
+  padding: 20px 42px;
+  border-radius: 100px;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.view-rec-btn span {
+  font-size: 1.3rem;
+  transition: transform 0.3s ease;
+}
+
+.view-rec-btn:hover {
+  background: #c94c72;
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 15px 35px rgba(201, 76, 114, 0.3);
+}
+
+.view-rec-btn:hover span {
+  transform: translateX(8px);
+}
+
+/* --- Mobile Adjustments --- */
+@media (max-width: 768px) {
+  .recommendation-cta {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px 25px;
+  }
+  
+  .cta-content p {
+    margin: 0 auto 20px auto;
+  }
+
+  .view-rec-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+
+/* --- Understanding PCOS Section --- */
+.info-card {
+  background: linear-gradient(to bottom, #fff5f7, #ffffff);
+  border-radius: 28px;
+  padding: 30px;
+  text-align: center;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 25px 0;
+}
+
+.info-item {
+  background: white;
+  padding: 20px;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.support-footer {
+  background: #fdf2f8;
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  gap: 15px;
+  text-align: left;
+}

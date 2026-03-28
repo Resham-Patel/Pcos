@@ -1,0 +1,200 @@
+/* Update these in recommendation.css */
+
+.rec-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  /* INCREASE THIS: Ensure it is more than the height of your Navbar */
+  padding: 160px 5% 100px 5%; 
+  position: relative;
+  display: flex !important; /* Force layout */
+  flex-direction: column;
+  min-height: 100vh;
+  z-index: 1;
+}
+
+.main-content {
+  /* Ensure the main wrapper doesn't collapse */
+  min-height: calc(100vh - 160px); 
+  display: block;
+}
+
+.rec-content-area {
+  position: relative;
+  z-index: 2;
+  margin-top: 30px;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+
+
+/* Background Glow */
+.bg-glow-pink {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(201, 76, 114, 0.05) 0%, transparent 70%);
+  z-index: -1;
+}
+
+.rec-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.top-meta {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.badge-pill {
+  background: #fdf2f8;
+  color: #db2777;
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.date-stamp {
+  color: #999;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.rec-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+  color: #1a1a1a;
+}
+
+/* Stats Bar */
+.quick-stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 20px;
+  margin-bottom: 50px;
+  border: 1px solid #eee;
+}
+
+.stat-item { font-size: 0.9rem; color: #555; }
+.stat-item span { font-weight: 800; color: #1a1a1a; margin-right: 5px; }
+
+/* Tabs */
+.rec-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.tab-btn {
+  padding: 16px 32px;
+  border-radius: 100px;
+  border: 1px solid #eee;
+  background: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tab-btn.active {
+  background: #1a1a1a;
+  color: white;
+  border-color: #1a1a1a;
+}
+
+/* Cards Grid */
+.rec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.rec-card {
+  background: white;
+  padding: 40px;
+  border-radius: 32px;
+  border: 1px solid #f0f0f0;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.rec-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(201, 76, 114, 0.08);
+  border-color: #fceef2;
+}
+
+.rec-card.featured {
+  background: linear-gradient(to bottom right, #ffffff, #fffafa);
+  border: 1.5px solid #fceef2;
+}
+
+.card-tag {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #c94c72;
+}
+
+.card-icon { font-size: 2.5rem; margin-bottom: 20px; }
+.rec-card h4 { font-size: 1.3rem; margin-bottom: 15px; color: #1a1a1a; }
+.rec-card p { color: #666; line-height: 1.6; font-size: 0.95rem; }
+
+.card-tips {
+  margin-top: 20px;
+  padding-left: 18px;
+  color: #c94c72;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* Footer Actions */
+.action-footer {
+  margin-top: 60px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.primary-btn, .secondary-btn {
+  padding: 18px 40px;
+  border-radius: 100px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.primary-btn { background: #c94c72; color: white; border: none; }
+.secondary-btn { background: white; color: #1a1a1a; border: 1px solid #eee; }
+
+.disclaimer-text {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.8rem;
+  color: #aaa;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .quick-stats-bar { flex-direction: column; align-items: center; gap: 10px; }
+  .rec-header h1 { font-size: 2.5rem; }
+  .action-footer { flex-direction: column; }
+}
