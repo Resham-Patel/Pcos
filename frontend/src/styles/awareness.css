@@ -11,7 +11,7 @@
   width: 100%;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 48px 24px 90px;
+  padding: 30px 24px 90px;
   min-height: 100vh;
   box-sizing: border-box;
   background-color: var(--soft-bg);
@@ -45,23 +45,13 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  margin-bottom: 22px;
+  margin-bottom: 17px;
 }
 
 .awareness-section-header h2 {
   font-size: 1.8rem;
   color: var(--text-main);
   font-weight: 700;
-}
-
-.view-all-btn {
-  background: none;
-  border: none;
-  color: var(--primary-pink);
-  font-size: 0.95rem;
-  font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
 }
 
 /* Featured Card */
@@ -116,6 +106,7 @@
   cursor: pointer;
   min-height: 180px;
   box-shadow: var(--card-shadow);
+  margin-top: 15px;
 }
 
 .awareness-grid-card:hover {
@@ -129,6 +120,7 @@
 .soft-blue {
   background-color: #f0f7ff;
 }
+.sof
 
 .card-icon-small {
   font-size: 1.5rem;
@@ -157,12 +149,19 @@
   text-align: center;
   box-shadow: 0 10px 25px rgba(201, 76, 114, 0.26);
   margin-bottom: 50px;
+  margin-top: 55px;
 }
 
 .stat-number {
   font-size: 2.6rem;
   font-weight: 800;
   margin-bottom: 12px;
+}
+
+.awareness-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 .awareness-stat-card p {
@@ -214,9 +213,6 @@
   background-color: #fff0f0;
 }
 
-.exercise-bg {
-  background-color: #f0f4ff;
-}
 
 .insight-text h4 {
   font-size: 1rem;

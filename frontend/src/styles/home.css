@@ -1,38 +1,48 @@
 /* --- 1. GLOBAL & HERO STYLES --- */
+:root {
+  --text-primary: #1a1a1a;
+  --text-muted: #666;
+  --brand-pink: #c94c72;
+  --brand-berry: #a32a53;
+  --bg-white: #ffffff;
+  --bg-subtle: #f9f9f9;
+}
+
 .home-container {
-  padding: 0px 8% 50px 8%; 
+  padding: 0;
   min-height: 100vh;
   display: flex;
-  flex-direction: column; 
-  align-items: flex-start; 
-  background: linear-gradient(135deg, #fff5f7 0%, #ffffff 100%);
+  flex-direction: column;
+  background: white;
 }
 
 .hero-section {
   display: flex;
-  align-items: flex-start; 
+  align-items: center; /* Centered vertically for better balance */
   justify-content: space-between;
   width: 100%;
-  gap: 40px;
-  margin-top: 50px; 
-  margin-left:100px;
+  max-width: 1200px;
+  margin: 80px auto 0 auto; /* Centered the section itself */
+  padding: 0 5%;
+  gap: 60px;
 }
 
 .hero-content {
-  flex: 0.8; 
-  max-width: 500px;
+  flex: 1;
+  max-width: 550px;
 }
 
 .badge {
   background-color: rgba(201, 76, 114, 0.1);
-  color: #c94c72;
+  color: var(--brand-pink);
   padding: 6px 16px;
   border-radius: 30px;
-  font-size: 0.75rem; 
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
   display: inline-block;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
 }
 
 .hero-title {
@@ -40,17 +50,17 @@
   font-size: 3.8rem;
   font-weight: 800;
   line-height: 1.1;
-  margin: 15px 0;
-  color: #1a1a1a;
+  margin-bottom: 20px;
+  color: var(--text-primary);
 }
 
-.highlight { color: #c94c72; }
+.highlight { color: var(--brand-pink); }
 
 .hero-description {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 35px;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 40px;
 }
 
 .hero-btns {
@@ -59,151 +69,176 @@
 }
 
 .btn-primary {
-  background-color: #1a1a1a;
+  background-color: var(--text-primary);
   color: white;
-  padding: 12px 28px;
+  padding: 14px 32px;
   border-radius: 30px;
   font-weight: 600;
   border: none;
   cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
 .btn-secondary {
   background-color: #f0f0f0;
   color: #555;
-  padding: 12px 28px;
+  padding: 14px 32px;
   border-radius: 30px;
   font-weight: 600;
   border: none;
   cursor: pointer;
 }
 
+.btn-primary:hover { transform: translateY(-2px); background-color: #333; }
+
+/* Fixed Hero Image Alignment */
 .hero-image-container {
-  flex: 1.2; 
+  flex: 1;
   display: flex;
-  justify-content: flex-end;
-  margin-top: -20px; 
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
 }
 
-.image-placeholder img {
+.hero-image {
   width: 100%;
-  max-width: 500px; 
+  max-width: 550px; /* Adjusted for better scale */
   height: auto;
   object-fit: contain;
+  filter: drop-shadow(0 20px 50px rgba(201, 76, 114, 0.1));
+  border-radius: 30px; /* Soft brand shadow */
 }
 
-/* --- 2. KEY FEATURES SECTION (GRADIENT CARDS) --- */
+/* --- 2. KEY FEATURES SECTION --- */
 .features-wrapper {
   width: 100%;
-  margin-top: 200px;
+  margin-top: 120px;
   text-align: center;
-  padding-bottom: 80px;
+  padding: 0 5% 80px 5%;
 }
 
 .section-title {
   font-family: 'Playfair Display', serif;
-  font-size: 2.2rem;
+  font-size: 2.8rem;
   margin-bottom: 60px;
-  color: #1a1a1a;
+  color: var(--text-primary);
 }
 
 .features-grid {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .feature-card {
-  flex: 1;
-  max-width: 320px;
+  border-radius: 28px;
   padding: 40px 30px;
-  border-radius: 40px; /* Modern high-radius from reference */
   text-align: left;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-/* Multi-colored smooth gradients */
-.blue-gradient { background: linear-gradient(180deg, #e0f2ff 0%, #c9e8ff 100%); }
-.purple-gradient { background: linear-gradient(180deg, #f3e8ff 0%, #d8b4fe 100%); }
-.teal-gradient { background: linear-gradient(180deg, #e2fbf5 0%, #a7f3e0 100%); }
-
-.feature-icon-box {
-  width: 54px;
-  height: 54px;
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-}
-
-.feature-card h3 {
-  font-size: 1.4rem;
-  font-weight: 700;
-  margin: 25px 0 12px 0;
-}
-
-.feature-nav-btn {
-  background: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 20px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: auto;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
 }
 
 .feature-card:hover {
-  transform: translateY(-15px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
-/* --- 3. UNDERSTANDING PCOS (BENTO GRID) --- */
+.blue-glass { background: linear-gradient(135deg, #a3d0ef 0%, #c3dee9 100%); }
+.purple-glass { background: linear-gradient(135deg, #bbb2c4 0%, #c8b9d7 100%); }
+.green-glass { background: linear-gradient(135deg, #96b19e 0%, #bbd8c5 100%); }
+
+.card-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.icon-wrapper {
+  font-size: 2.2rem;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 15px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-wrapper h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.text-wrapper p {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.card-btn {
+  background: white;
+  color: var(--text-primary);
+  border: none;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.3s;
+}
+
+.card-btn:hover { background: var(--text-primary); color: white; }
+
+/* --- 3. UNDERSTANDING PCOS (BENTO) --- */
 .pcos-education-wrapper {
   width: 100%;
-  margin-top: 100px;
-  padding-bottom: 100px;
+  max-width: 1200px;
+  margin: 100px auto;
+  padding: 0 5% 100px 5%;
 }
 
 .section-header-left {
   text-align: left;
-  margin-bottom: 40px;
+  margin-bottom: 45px;
 }
 
 .pcos-title {
   font-family: 'Playfair Display', serif;
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   font-weight: 800;
+  margin-bottom: 15px;
 }
 
 .pcos-bento-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: minmax(180px, auto);
+  grid-auto-rows: minmax(220px, auto);
   gap: 24px;
 }
 
 .pcos-card {
   background: white;
   border-radius: 32px;
-  padding: 30px;
+  padding: 35px;
   border: 1px solid rgba(0,0,0,0.04);
-  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
 }
+
+.pcos-card:hover { transform: translateY(-5px); border-color: rgba(0,0,0,0.1); }
 
 .main-path-card {
   grid-column: span 2;
-  display: flex;
-  align-items: center;
+  flex-direction: row;
   padding: 0 0 0 40px;
   overflow: hidden;
 }
@@ -216,280 +251,134 @@
 }
 
 .insight-highlight {
-  background: #ff4d8d; /* Vibrant Pink */
+  background: #1a1a1a;
   color: white;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
 }
 
+.insight-highlight h4 { color: white; margin-bottom: 10px; font-size: 1.3rem; }
+.insight-highlight p { color: rgba(255,255,255,0.7); }
+
 .community-stack-card {
-  background: #ebebeb;
-  display: flex;
-  flex-direction: column;
+  background: var(--bg-subtle);
   justify-content: space-between;
 }
 
-.avatar-group {
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-}
-
+.avatar-group { display: flex; align-items: center; }
 .avatar-circle {
-  width: 35px;
-  height: 35px;
+  width: 38px; height: 38px;
   background: #fff;
-  border: 3px solid #ebebeb;
-  border-radius: 50%;
-  margin-right: -12px;
-}
-
-.join-count {
-  margin-left: 25px;
-  font-weight: 800;
-  color: #1a1a1a;
-}
-/* --- Understanding PCOS Section --- */
-
-.pcos-education-wrapper {
-  width: 100%;
-  margin-top: 100px;
-  padding-bottom: 100px;
-}
-
-.section-header-left {
-  text-align: left;
-  margin-bottom: 40px;
-}
-
-.pcos-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 12px;
-}
-
-.pcos-subtitle {
-  font-size: 1rem;
-  color: var(--text-muted);
-  max-width: 550px;
-  line-height: 1.5;
-}
-
-/* Bento Grid Layout - Retains exact 3-column structure */
-.pcos-bento-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: minmax(200px, auto); /* Exact height management */
-  gap: 24px;
-  
-}
-
-/* Common Card Base Style - Soft Radius, Subltle Border */
-.pcos-card {
-  background: var(--bg-white);
-  border-radius: 32px;
-  padding: 35px;
-  border: 1px solid rgba(0,0,0,0.04);
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease;
-}
-
-/* Large Featured Card (Top Left) - Spans 2 Columns */
-.main-path-card {
-  grid-column: span 2;
-  flex-direction: row;
-  align-items: center;
-  padding: 0 0 0 40px;
-  overflow: hidden;
-}
-
-.path-text { flex: 1; padding-right: 20px; }
-.path-text h3 { font-size: 1.8rem; margin-bottom: 15px; color: var(--text-primary); }
-
-/* Soft abstract illustration on the right of the large card */
-.path-visual { 
-  flex: 1; 
-  height: 100%; 
-  /* Uses muted pink/grey abstract shape */
-  background: linear-gradient(135deg, #fff5f7 0%, #ffe0e9 100%);
-  border-radius: 0 32px 32px 0;
-}
-
-.path-link {
-  color: #c94c72; /* Keep a hint of signature pink for calls-to-action */
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.9rem;
-  display: inline-block;
-  margin-top: 15px;
-}
-
-/* --- Key Minimalist Color Changes --- */
-
-/* 1. Daily Insight Card - Vibrant Pink becomes Minimalist Charcoal */
-.insight-highlight {
-  background: #1a1a1a; /* Modern, desaturated black/grey */
-  color: white; /* Contrast text */
-  justify-content: center;
-}
-
-.insight-icon { font-size: 2rem; margin-bottom: 15px; }
-.insight-highlight h4 { font-size: 1.3rem; margin-bottom: 8px; color: white; }
-.insight-highlight p { color: rgba(255,255,255,0.8); }
-
-/* 2. Utility Cards (Mapping & Nutrition) - Remain White */
-.utility-card h4 { margin: 15px 0 8px 0; color: var(--text-primary); }
-
-.util-icon-box {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-/* All utility icons use muted backgrounds to match the minimalist theme */
-.util-icon-box.grey-bg { background: #f5f5f5; color: #555; }
-
-/* 3. Community Support Card - Muted Light Grey */
-.community-stack-card {
-  background: var(--bg-subtle); /* Subtle grey differentiation */
-  justify-content: space-between;
-}
-
-.community-stack-card h4 { color: var(--text-primary); }
-.community-stack-card p { color: var(--text-muted); }
-
-/* --- Avatars - Desaturated Stack --- */
-.avatar-group {
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.avatar-circle {
-  width: 35px;
-  height: 35px;
-  background: #ffffff;
   border: 3px solid var(--bg-subtle);
   border-radius: 50%;
   margin-right: -12px;
-  transition: all 0.3s ease;
 }
 
-.avatar-circle:hover {
-  transform: scale(1.1);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
+.join-count { margin-left: 25px; font-weight: 800; font-size: 0.9rem; }
 
-.join-count {
-  margin-left: 25px;
-  font-weight: 800;
-  font-size: 0.85rem;
-  color: var(--text-primary);
-}
-
-/* Minimalist Hover Lift */
-.pcos-card:hover { 
-  transform: translateY(-5px); 
-  border-color: rgba(0,0,0,0.1);
-}
-/* --- Footer Styles --- */
-.footer {
-  width: 100%;
-  background-color: #f9f9f9; /* Subtle grey background */
-  padding: 80px 8% 40px 8%;
-  border-top: 1px solid #eeeeee;
-  color: #1a1a1a;
-}
-
-.footer-top {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 60px;
-}
-
-.footer-brand {
-  max-width: 300px;
-}
-
-.footer-tagline {
-  margin-top: 15px;
-  color: #666;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.footer-links-grid {
-  display: flex;
-  gap: 80px;
-}
-
-.footer-column h4 {
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.footer-column ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-column li {
-  margin-bottom: 12px;
-}
-
-.footer-column a {
-  text-decoration: none;
-  color: #666;
-  font-size: 0.9rem;
-  transition: color 0.3s ease;
-}
-
-.footer-column a:hover {
-  color: #1a1a1a;
-}
-
-/* --- Ultra-Minimalist Footer --- */
+/* --- 4. ULTRA-MINIMALIST FOOTER --- */
 .footer-minimal {
   width: 100%;
-  background-color: #f9f9f9; /* Subtle grey background */
-  padding: 30px 8%; /* Tight vertical spacing for a small feel */
-  border-top: 1px solid #eeeeee; /* Light separator */
+  background-color: var(--bg-subtle);
+  padding: 20px 8%;
+  border-top: 1px solid #eee;
+  height: 80px;
 }
 
 .footer-content {
   display: flex;
-  justify-content: space-between; /* Pushes logo and copyright to opposite ends */
+  justify-content: space-between;
   align-items: center;
 }
 
 .footer-brand-minimal {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.footer-brand-minimal .logo-img {
-  height: 30px; /* Small, discrete logo size */
+  gap: 12px;
 }
 
 .footer-brand-minimal .logo-text {
   font-family: 'Playfair Display', serif;
   font-weight: 800;
-  color: #c94c72; /* Retains brand identity */
-  font-size: 1.2rem;
+  color: var(--brand-pink);
+  font-size: 1.4rem;
 }
 
 .footer-copyright-minimal p {
-  font-size: 0.8rem; /* Small, professional text */
-  color: #999999; /* Muted grey for copyright */
-  margin: 0;
+  font-size: 0.85rem;
+  color: #999;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 992px) {
+  .hero-section { flex-direction: column; text-align: center; margin-top: 40px; }
+  .hero-content { margin: 0 auto; }
+  .hero-btns { justify-content: center; }
+  .hero-image-container { margin-top: 20px; }
+  .pcos-bento-grid { grid-template-columns: 1fr; }
+  .main-path-card { grid-column: span 1; flex-direction: column; padding: 40px; }
+  .path-visual { display: none; }
+}
+/* CTA Banner Styles */
+.cta-banner-wrapper {
+  margin-bottom: 100px;
+  margin-top: 1px;
+  padding: 20px 8%;
+  display: flex;
+  justify-content: center;
+}
+
+.cta-card {
+  background-color: #1a1a1a; /* Dark background from Image 4 */
+  color: white;
+  padding: 60px 40px;
+  border-radius: 40px;
+  text-align: center;
+  width: 100%;
+  max-width: 1000px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.cta-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  margin-bottom: 60px;
+}
+
+.cta-card p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 40px;
+  font-size: 1.1rem;
+}
+
+.cta-form {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.cta-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 20px;
+  border-radius: 30px;
+  color: white;
+}
+
+.btn-accent {
+  background-color: #923954; /* Signature pink from your images */
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-accent:hover {
+  background-color: #a32a53;
+  transform: translateY(-2px);
 }

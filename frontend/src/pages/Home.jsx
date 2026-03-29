@@ -1,27 +1,34 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/home.css';
+
 const Home = () => {
+  const navigate = useNavigate();
+
   const features = [
     {
       title: "PCOS Prediction",
-      desc: "Early detection patterns using AI models trained on clinical datasets to help you understand your risk profile.",
-      icon: "📈",
-      linkText: "Learn more",
-      theme: "blue-gradient"
+      desc: "Identify key indicators and understand your risk profile using clinical-grade AI.",
+      icon: "📊",
+      btnText: "LEARN MORE",
+      link: "/predict",
+      colorClass: "blue-glass"
     },
     {
       title: "Personalized Care",
-      desc: "Dynamic meal plans, exercise routines, and sleep optimization strategies tailored to your hormonal cycle.",
-      icon: "🧘‍♀️",
-      linkText: "Explore Plans",
-      theme: "purple-gradient"
+      desc: "Unlock tailored meal plans and fitness regimens that adapt to your cycle.",
+      icon: "📅",
+      btnText: "VIEW CARE PLANS",
+      link: "/recommendations",
+      colorClass: "purple-glass"
     },
     {
       title: "AI Chatbot Support",
-      desc: "24/7 empathetic conversational AI to answer your questions and provide emotional support on your journey.",
-      icon: "✨",
-      linkText: "Chat Now",
-      theme: "teal-gradient"
+      desc: "Access immediate, compassionate guidance with 24/7 AI-driven support.",
+      icon: "🤖",
+      btnText: "TALK TO US NOW",
+      link: "/chat",
+      colorClass: "green-glass"
     }
   ];
 
@@ -40,30 +47,32 @@ const Home = () => {
             and AI-driven insights.
           </p>
           <div className="hero-btns">
-            <button className="btn-primary">Start Your Journey</button>
-            <button className="btn-secondary">Learn More</button>
+            <button className="btn-primary" onClick={() => navigate('/signup')}>Start Your Journey</button>
+            <button className="btn-secondary" onClick={() => navigate('/awareness')}>Learn More</button>
           </div>
         </div>
 
         <div className="hero-image-container">
-          <div className="image-placeholder">
-            <img src="/home_page.png" alt="FemWell Avatar" className="hero-image" />
-          </div>
+          <img src="/home_page.png" alt="FemWell Illustration" className="hero-image" />
         </div>
       </section>
 
-      {/* 2. Key Features Section */}
+      {/* 2. Key Features Section (The Cards from your Image) */}
       <section className="features-wrapper">
-        <h2 className="section-title">Key Features</h2>
+        <h2 className="section-title">Precision Tools for Your Health</h2>
         <div className="features-grid">
           {features.map((f, index) => (
-            <div key={index} className={`feature-card ${f.theme}`}>
-              <div className="feature-icon-box">{f.icon}</div>
-              <h3>{f.title}</h3>
-              <p>{f.desc}</p>
-              <button className="feature-nav-btn">
-                {f.linkText} <span className="arrow">→</span>
-              </button>
+            <div key={index} className={`feature-card ${f.colorClass}`}>
+              <div className="card-content">
+                <div className="icon-wrapper">{f.icon}</div>
+                <div className="text-wrapper">
+                  <h3>{f.title}</h3>
+                  <p>{f.desc}</p>
+                  <button className="card-btn" onClick={() => navigate(f.link)}>
+                    {f.btnText} <span className="arrow">›</span>
+                  </button>
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -71,56 +80,48 @@ const Home = () => {
 
       {/* 3. Understanding PCOS Section (Bento Grid) */}
       <section className="pcos-education-wrapper">
-        <div className="section-header-left">
-          <h2 className="pcos-title">Understanding PCOS</h2>
-          <p className="pcos-subtitle">
-            Knowledge is empowerment. Explore the facets of PCOS through our expert-curated educational modules.
-          </p>
-        </div>
+        {/* <div className="section-header-left"> */}
+          {/* <h2 className="pcos-title">Understanding PCOS</h2>
+          <p className="pcos-subtitle">Knowledge is empowerment. Explore expert-curated modules.</p>
+        </div> */}
 
-        <div className="pcos-bento-grid">
+        {/* <div className="pcos-bento-grid">
           <div className="pcos-card main-path-card">
             <div className="path-text">
               <h3>The Hormonal Symphony</h3>
-              <p>Dive deep into how insulin resistance and androgen levels interact within your body’s ecosystem.</p>
-              <a href="#" className="path-link">Explore Educational Path <span className="arrow">→</span></a>
+              <p>Dive deep into insulin resistance and androgen levels.</p>
+              <a href="#" className="path-link">Explore Path →</a>
             </div>
-            <div className="path-visual"></div>
           </div>
-
           <div className="pcos-card insight-highlight">
-            <div className="insight-icon">💡</div>
             <h4>Daily Insight</h4>
-            <p>Magnesium intake can significantly improve insulin sensitivity for some.</p>
+            <p>Magnesium improves insulin sensitivity.</p>
           </div>
-
-          <div className="pcos-card utility-card">
-            <div className="util-icon-box pink-bg">🌷</div>
-            <h4>Cycle Mapping</h4>
-            <p>Visualizing the patterns that standard apps often miss.</p>
-          </div>
-
-          <div className="pcos-card utility-card">
-            <div className="util-icon-box grey-bg">🍏</div>
-            <h4>Nutrition Guides</h4>
-            <p>Anti-inflammatory recipes designed for hormonal health.</p>
-          </div>
-
           <div className="pcos-card community-stack-card">
-            <h4>Community Support</h4>
-            <p>Connect with others navigating the same journey.</p>
+            <h4>Community</h4>
             <div className="avatar-group">
-              <div className="avatar-circle"></div>
               <div className="avatar-circle"></div>
               <div className="avatar-circle"></div>
               <span className="join-count">+12k</span>
             </div>
+          </div> */}
+        {/* </div> */}
+      </section>
+      <section className="cta-banner-wrapper">
+        <div className="cta-card">
+          <h2>Ready to reclaim your cycle?</h2>
+         
+          <div className="cta-form">
+            
+            <button 
+              className="btn-accent" 
+              onClick={() => navigate('/signup')}
+            >
+              Get Early Access
+            </button>
           </div>
         </div>
       </section>
-
-      {/* 4. Final Minimalist Footer */}
-      
     </div>
   );
 };

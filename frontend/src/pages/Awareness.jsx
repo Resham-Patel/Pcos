@@ -7,15 +7,14 @@ const Awareness = () => {
       {/* Header Section */}
       <header className="awareness-header">
         <div className="user-welcome">
-          <h1>Your Wellness<br />Sanctuary.</h1>
+          <h1>Awareness Hub</h1>
         </div>
       </header>
 
       {/* Hub Section */}
       <section className="awareness-section">
         <div className="awareness-section-header">
-          <h2>Awareness Hub</h2>
-          <button className="view-all-btn">View all articles</button>
+
         </div>
 
         {/* Featured Card */}
@@ -35,11 +34,21 @@ const Awareness = () => {
           </div>
         </Link>
 
-        <div className="awareness-grid-card soft-blue">
-          <div className="card-icon-small">🥗</div>
-          <h4>Hormone Balance</h4>
-          <p>Nutrition tips for cycle regulation.</p>
-        </div>
+        <Link to="/hormone-balance-awareness" className="awareness-card-link">
+          <div className="awareness-grid-card soft-blue">
+            <div className="card-icon-small">🥗</div>
+            <h4>Hormone Balance</h4>
+            <p>Nutrition tips for cycle regulation.</p>
+          </div>
+        </Link>
+
+        <Link to="/exercise-guide-awareness" className="awareness-card-link">
+          <div className="awareness-grid-card soft-green">
+            <div className="card-icon-small">🤸</div>
+            <h4>Exercise Guide</h4>
+            <p>Low-impact routines for hormonal health.</p>
+          </div>
+        </Link>
 
         <div className="awareness-stat-card">
           <div className="stat-number">1 in 10</div>
@@ -55,23 +64,18 @@ const Awareness = () => {
         <h3>Daily Insights</h3>
 
         <div className="insights-grid">
-          <div className="insight-row">
-            <div className="insight-icon myth-bg">💡</div>
-            <div className="insight-text">
-              <h4>Myth vs. Fact</h4>
-              <p>PCOS isn't just about fertility.</p>
+          <Link to="/myth-vs-fact-awareness" className="awareness-card-link">
+            <div className="insight-row">
+              <div className="insight-icon myth-bg">💡</div>
+              <div className="insight-text">
+                <h4>Myth vs. Fact</h4>
+                <p>PCOS isn't just about fertility.</p>
+              </div>
+              <span className="arrow-right">›</span>
             </div>
-            <span className="arrow-right">›</span>
-          </div>
+          </Link>
 
-          <div className="insight-row">
-            <div className="insight-icon exercise-bg">🤸</div>
-            <div className="insight-text">
-              <h4>Exercise Guide</h4>
-              <p>Low-impact routines for hormonal health.</p>
-            </div>
-            <span className="arrow-right">›</span>
-          </div>
+
         </div>
       </section >
     </div >
