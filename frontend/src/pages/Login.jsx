@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/signup.css';
 
 const Login = () => {
@@ -11,14 +12,14 @@ const Login = () => {
           <div className="visual-content">
             <h2 className="brand-name">FemWell</h2>
             <div className="hero-text-group">
-            
+
               <h1>Your journey to hormonal harmony starts here.</h1>
               <div className="quote-block">
                 <p>“Healing is not a destination, it’s the grace you give yourself every single day.”</p>
               </div>
             </div>
-            
-            
+
+
           </div>
         </div>
 
@@ -29,13 +30,13 @@ const Login = () => {
             <p className="subtitle">Access your personalized wellness tracking and AI guidance.</p>
 
             <form className="login-form">
-                
+
               <div className="input-field">
                 <label>Email Address</label>
                 <input type="email" placeholder="name@example.com" />
               </div>
 
-             <div className="input-field">
+              <div className="input-field">
                 <div className="label-row">
                   <label>Password</label>
                   <a href="#" className="forgot-link">FORGOT?</a>
@@ -45,7 +46,7 @@ const Login = () => {
                 </div>
               </div>
 
-              
+
 
               <button type="submit" className="btn-enter">
                 Get Started
@@ -58,13 +59,13 @@ const Login = () => {
           </div>
         </div>
       </div>
-      
+
       {/* External Footer Links */}
       <footer className="auth-footer">
         <div className="footer-links">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Medical Disclaimer</a>
-          <a href="#">Contact Support</a>
+          <Link to="/privacy-policy">Privacy Policy</Link>
+          <Link to="/medical-disclaimer">Medical Disclaimer</Link>
+          <Link to="/contact-support">Contact Support</Link>
         </div>
         <p>© 2026 FemWell Digital. All rights reserved.</p>
       </footer>

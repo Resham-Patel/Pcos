@@ -13,10 +13,6 @@ const Awareness = () => {
 
       {/* Hub Section */}
       <section className="awareness-section">
-        <div className="awareness-section-header">
-
-        </div>
-
         {/* Featured Card */}
         <div className="awareness-featured-card">
           <div className="awareness-badge">ESSENTIAL</div>
