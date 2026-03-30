@@ -28,5 +28,4 @@ def predict_pcos(db, user_id, data):
     return {
         "prediction": int(prediction),
         "confidence": round(confidence * 100, 2),
-        "recommendation": recommendation   # ✅ include in API response
     }

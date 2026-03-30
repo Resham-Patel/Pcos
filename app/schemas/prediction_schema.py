@@ -19,6 +19,5 @@ class PredictionRequest(BaseModel):
 class PredictionResponse(BaseModel):
     prediction: int
     confidence: float
-    recommendation: str
     class Config:
         from_attributes = True

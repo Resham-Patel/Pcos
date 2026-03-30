@@ -261,6 +261,12 @@ input:checked + .slider:before { transform: translateX(22px); }
   margin-bottom: 12px;
 }
 
+.confidence-text {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: #777;
+  font-weight: 500;
+}
 
 /* --- Premium Recommendation CTA --- */
 .recommendation-cta {

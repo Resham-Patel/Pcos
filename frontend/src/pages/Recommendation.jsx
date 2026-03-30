@@ -1,146 +1,164 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { getRecommendation } from "../services/api";
 import "../styles/recommendation.css";
 
 const Recommendation = () => {
-  const [activeTab, setActiveTab] = useState("diet");
+  const [recommendation, setRecommendation] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Force scroll to top when page loads
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    const fetchRecommendation = async () => {
+      try {
+        const savedData = localStorage.getItem("recommendationData");
+
+        if (!savedData) {
+          console.error("No recommendation data found");
+          setLoading(false);
+          return;
+        }
+
+        const parsedData = JSON.parse(savedData);
+        const response = await getRecommendation(parsedData);
+
+        setRecommendation(response.data);
+      } catch (error) {
+        console.error("Error fetching recommendation:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecommendation();
   }, []);
+
+  const aiText =
+    recommendation?.ai_generated &&
+      recommendation.ai_generated !== "AI recommendation not available (API key missing)"
+      ? recommendation.ai_generated
+      : "Based on your symptoms and prediction result, focus on consistent lifestyle support, menstrual health monitoring, regular movement, and a balanced diet to improve hormonal wellness.";
+
+  if (loading) {
+    return (
+      <section className="rec-page">
+        <div className="rec-container">
+          <div className="loading-box">Loading recommendation...</div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!recommendation) {
+    return (
+      <section className="rec-page">
+        <div className="rec-container">
+          <div className="loading-box">No recommendation available.</div>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <div className="rec-container">
-      {/* Background Decorative Elements */}
-      <div className="bg-glow-pink"></div>
+    <section className="rec-page">
+      <div className="rec-bg-orb rec-bg-orb-one"></div>
+      <div className="rec-bg-orb rec-bg-orb-two"></div>
 
-      <header className="rec-header">
-        <div className="top-meta">
-          <span className="badge-pill">AI PERSONALIZED PLAN</span>
-          <span className="date-stamp">March 2026</span>
+      <div className="rec-container">
+        <header className="rec-header">
+          <div className="top-meta">
+            <span className="badge-pill">AI PERSONALIZED PLAN</span>
+            <span className="date-stamp">March 2026</span>
+          </div>
+
+          <h1>
+            Your Wellness <span className="pink-text">Blueprint</span>
+          </h1>
+
+          <p className="rec-subtitle">
+            Your plan is generated from your prediction result and symptom
+            profile to help guide healthier daily choices.
+          </p>
+        </header>
+
+        <div className="section-head">
+          <div>
+            <h3>Personalized AI Guidance</h3>
+            <p>AI-generated suggestions tailored to your prediction and symptoms.</p>
+          </div>
         </div>
-        <h1>
-          Your Wellness <span className="pink-text">Blueprint</span>
-        </h1>
-        <p>
-          Small, consistent changes lead to significant hormonal harmony. Here
-          is your roadmap.
+
+        <div className="ai-grid">
+          <article className="ai-card">
+            <div className="ai-card-icon">🥗</div>
+            <h4>Diet</h4>
+            <p>{recommendation.ai_generated?.diet}</p>
+          </article>
+
+          <article className="ai-card">
+            <div className="ai-card-icon">🏃</div>
+            <h4>Exercise</h4>
+            <p>{recommendation.ai_generated?.exercise}</p>
+          </article>
+
+          <article className="ai-card">
+            <div className="ai-card-icon">🌿</div>
+            <h4>Lifestyle</h4>
+            <p>{recommendation.ai_generated?.lifestyle}</p>
+          </article>
+        </div>
+
+        <div className="section-head">
+          <div>
+            <h3>Actionable Tips</h3>
+            <p>
+              These suggestions are based on your inputs and prediction outcome.
+            </p>
+          </div>
+        </div>
+
+        <div className="rec-grid">
+          {recommendation.rule_based && recommendation.rule_based.length > 0 ? (
+            recommendation.rule_based.map((item, index) => (
+              <article
+                key={index}
+                className={index === 0 ? "rec-card featured" : "rec-card"}
+              >
+                {index === 0 && <div className="card-tag">PRIORITY</div>}
+                <div className="card-icon">✨</div>
+                <h4>Recommendation {index + 1}</h4>
+                <p>{item}</p>
+              </article>
+            ))
+          ) : (
+            <article className="rec-card featured">
+              <div className="card-icon">💡</div>
+              <h4>General Advice</h4>
+              <p>No rule-based tips were generated for this input.</p>
+            </article>
+          )}
+        </div>
+
+        <div className="action-footer">
+          <button className="secondary-btn" onClick={() => window.print()}>
+            Download Report
+          </button>
+
+          <button
+            className="primary-btn"
+            onClick={() => (window.location.href = "/predict")}
+          >
+            Retake Assessment
+          </button>
+        </div>
+
+        <p className="disclaimer-text">
+          Disclaimer: This AI-generated plan is for informational purposes only.
+          Consult a gynecologist or endocrinologist before making major
+          lifestyle changes.
         </p>
-      </header>
-
-      {/* Quick Stats bar */}
-      <div className="quick-stats-bar">
-        <div className="stat-item">
-          <span>Status:</span> 🟢 Optimizing
-        </div>
-        <div className="stat-item">
-          <span>Focus:</span> Insulin Sensitivity
-        </div>
-        <div className="stat-item">
-          <span>Duration:</span> 12 Week Cycle
-        </div>
       </div>
-
-      <div className="rec-tabs">
-        <button
-          className={activeTab === "diet" ? "tab-btn active" : "tab-btn"}
-          onClick={() => setActiveTab("diet")}
-        >
-          <span className="tab-icon">🍎</span> Nutrition
-        </button>
-        <button
-          className={activeTab === "lifestyle" ? "tab-btn active" : "tab-btn"}
-          onClick={() => setActiveTab("lifestyle")}
-        >
-          <span className="tab-icon">✨</span> Lifestyle
-        </button>
-      </div>
-
-      <div className="rec-content-area">
-        {activeTab === "diet" ? (
-          <div className="rec-grid">
-            <div className="rec-card featured">
-              <div className="card-tag">PRIORITY</div>
-              <div className="card-icon">🥗</div>
-              <h4>Anti-Inflammatory Diet</h4>
-              <p>
-                Incorporate berries, fatty fish, and leafy greens to reduce
-                systemic inflammation often associated with PCOS.
-              </p>
-              <ul className="card-tips">
-                <li>Swap white rice for Quinoa</li>
-                <li>Add Cinnamon to morning oats</li>
-              </ul>
-            </div>
-
-            <div className="rec-card">
-              <div className="card-icon">🍵</div>
-              <h4>Hydration Strategy</h4>
-              <p>
-                Spearmint tea twice daily has been shown to help lower androgen
-                levels and reduce unwanted hair growth.
-              </p>
-            </div>
-
-            <div className="rec-card">
-              <div className="card-icon">🥜</div>
-              <h4>Healthy Fats</h4>
-              <p>
-                Prioritize Omega-3s from walnuts and flaxseeds to support
-                regular ovulation cycles.
-              </p>
-            </div>
-          </div>
-        ) : (
-          <div className="rec-grid">
-            <div className="rec-card featured">
-              <div className="card-tag">DAILY</div>
-              <div className="card-icon">🧘</div>
-              <h4>Low-Impact Movement</h4>
-              <p>
-                Heavy cardio can sometimes spike cortisol. Focus on Yoga,
-                Pilates, or brisk walking to stay active without stress.
-              </p>
-            </div>
-
-            <div className="rec-card">
-              <div className="card-icon">😴</div>
-              <h4>Sleep Hygiene</h4>
-              <p>
-                Aim for 8 hours of rest. Hormones like Ghrelin and Leptin
-                (hunger hormones) reset during deep sleep.
-              </p>
-            </div>
-
-            <div className="rec-card">
-              <div className="card-icon">☀️</div>
-              <h4>Morning Light</h4>
-              <p>
-                15 mins of sunlight exposure helps regulate your Circadian
-                rhythm and Vitamin D levels.
-              </p>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="action-footer">
-        <button className="secondary-btn" onClick={() => window.print()}>
-          Download Report
-        </button>
-        <button
-          className="primary-btn"
-          onClick={() => (window.location.href = "/predict")}
-        >
-          Retake Assessment
-        </button>
-      </div>
-
-      <p className="disclaimer-text">
-        Disclaimer: This AI-generated plan is for informational purposes only.
-        Consult a gynecologist or endocrinologist before making major lifestyle
-        changes.
-      </p>
-    </div>
+    </section>
   );
 };
 

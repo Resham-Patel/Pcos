@@ -43,9 +43,37 @@ const Predict = () => {
   // ✅ API CALL
   const handlePredict = async () => {
     try {
-      const res = await predictPCOS(formData);
+      const formattedData = {
+        ...formData,
+        age: parseInt(formData.age),
+        weight: parseFloat(formData.weight),
+        height: parseFloat(formData.height),
+        bmi: parseFloat(formData.bmi),
+      };
+
+      const res = await predictPCOS(formattedData);
       console.log(res.data);
       setResult(res.data);
+
+      const recommendationPayload = {
+        prediction: res.data.prediction,
+        age: parseInt(formData.age),
+        weight: parseFloat(formData.weight),
+        height: parseFloat(formData.height),
+        bmi: parseFloat(formData.bmi),
+        fast_food: formData.fast_food,
+        exercise: formData.exercise,
+        cycle: formData.cycle,
+        pimples: formData.pimples,
+        hair_growth: formData.hair_growth,
+        skin_darkening: formData.skin_darkening,
+        hair_loss: formData.hair_loss,
+      };
+
+      localStorage.setItem(
+        "recommendationData",
+        JSON.stringify(recommendationPayload)
+      );
     } catch (err) {
       console.log(err);
       alert("Prediction failed");
@@ -122,7 +150,7 @@ const Predict = () => {
           </h3>
           <div className="toggle-grid">
             {[
-              { id: "cycle", label: "Regular Cycle?" },
+              { id: "cycle", label: "Irregular Cycle?" },
               { id: "hair_growth", label: "Excessive Hair Growth" },
               { id: "skin_darkening", label: "Skin Darkening" },
               { id: "hair_loss", label: "Hair Loss/Thinning" },
@@ -193,8 +221,18 @@ const Predict = () => {
 
                 {/* ✅ FIXED RESULT */}
                 <h2 className="outcome-value">
-                  {result ? result.prediction : "Pending Input"}
+                  {result
+                    ? result.prediction === 1
+                      ? "High Risk"
+                      : "Low Risk"
+                    : "Pending Input"}
                 </h2>
+
+                {result && (
+                  <p className="confidence-text">
+                    Confidence: {(Math.min(result.confidence * 100, 95)).toFixed(1)}%
+                  </p>
+                )}
 
               </div>
             </div>
@@ -224,7 +262,13 @@ const Predict = () => {
             </div>
             <button
               className="view-rec-btn"
-              onClick={() => (window.location.href = "/recommendations")}
+              onClick={() => {
+                if (!result) {
+                  alert("Please run prediction first.");
+                  return;
+                }
+                window.location.href = "/recommendations";
+              }}
             >
               View My Plan <span>→</span>
             </button>

@@ -1,13 +1,27 @@
 import os
+import json
 from dotenv import load_dotenv
 from openai import OpenAI
 
 load_dotenv()
 
-api_key = os.getenv("OPENAI_API_KEY")
+api_key = os.getenv("OPENROUTER_API_KEY")
 
 # Initialize client only if key exists
-client = OpenAI(api_key=api_key) if api_key else None
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=api_key,
+    default_headers={
+        "HTTP-Referer": "http://localhost:5173",
+        "X-Title": "FemWell",
+    },
+) if api_key else None
+
+def get_value(symptoms, key):
+    # Works for both dict and Pydantic object
+    if isinstance(symptoms, dict):
+        return symptoms.get(key)
+    return getattr(symptoms, key, None)
 
 
 # 🔹 Rule-based
@@ -17,44 +31,71 @@ def generate_rules(symptoms, prediction):
     if prediction == 1:
         rules.append("High chance of PCOS")
 
-    if symptoms.fast_food:
+    if get_value(symptoms, "fast_food"):
         rules.append("Reduce fast food intake")
 
-    if not symptoms.exercise:
+    if not get_value(symptoms, "exercise"):
         rules.append("Start regular exercise")
 
-    if symptoms.cycle:
+    if get_value(symptoms, "cycle"):
         rules.append("Monitor menstrual cycle")
 
-    if symptoms.pimples:
+    if get_value(symptoms, "pimples"):
         rules.append("Maintain skincare and diet")
 
     return rules
 
-
-# 🔹 OpenAI (SAFE)
 def generate_ai_recommendation(rules):
-    # If no API key → skip AI
     if not client:
-        return "AI recommendation not available (API key missing)"
+        return {
+            "diet": "Focus on balanced meals, more fruits and vegetables, and reduce processed foods.",
+            "exercise": "Aim for regular light-to-moderate exercise like walking or yoga.",
+            "lifestyle": "Track your cycle, manage stress, and consult a healthcare professional if symptoms continue."
+        }
 
     try:
         prompt = f"""
-        Based on these conditions: {rules}
-        Give short, friendly health advice for PCOS.
-        """
+You are a women's health assistant.
+
+Based on these PCOS-related findings:
+{rules}
+
+Return ONLY valid JSON in this format:
+{{
+  "diet": "detailed diet advice (2–3 lines, specific, not generic)",
+  "exercise": "detailed exercise advice (2–3 lines, practical)",
+  "lifestyle": "detailed lifestyle advice (2–3 lines, meaningful)"
+}}
+
+Rules:
+- Make it personalized and helpful
+- Do NOT repeat the same text as rules
+- Do NOT be generic (avoid phrases like 'eat healthy', 'exercise regularly')
+- Explain WHY the advice helps PCOS
+- Keep it clear and user-friendly
+- No markdown
+"""
 
         response = client.chat.completions.create(
-            model="gpt-4.1-mini",
-            messages=[{"role": "user", "content": prompt}]
+            model="openai/gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You write clear, supportive health guidance in JSON only."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.5,
+            max_tokens=250
         )
 
-        return response.choices[0].message.content
+        content = response.choices[0].message.content.strip()
+        return json.loads(content)
 
     except Exception as e:
         print("OpenAI Error:", e)
-        return "AI recommendation failed, showing basic advice only."
-
+        return {
+            "diet": "Focus on balanced meals, more fruits and vegetables, and reduce processed foods.",
+            "exercise": "Aim for regular light-to-moderate exercise like walking or yoga.",
+            "lifestyle": "Track your cycle, manage stress, and consult a healthcare professional if symptoms continue."
+        }
 
 # 🔹 FINAL FUNCTION
 def get_recommendation(symptoms, prediction):

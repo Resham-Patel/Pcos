@@ -11,7 +11,7 @@ api.interceptors.request.use(
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log("Token attached to request:", token); 
+      console.log("Token attached to request:", token);
     }
 
     return config;
@@ -21,28 +21,16 @@ api.interceptors.request.use(
 
 // 🔥 AUTH APIs
 export const loginUser = (data) => api.post("/login", data);
-
 export const registerUser = (data) => api.post("/register", data);
 
-// export const forgotPassword = (data) =>
-//   api.post("/forgot-password", data);
-
-// export const resetPassword = (data) =>
-//   api.post("/reset-password", data);
-
-
-// ✅ PREDICTION API (NEW)
-export const predictPCOS = (data) =>{
-  const token = localStorage.getItem("token");
-
-  return axios.post(
-    "http://localhost:8000/prediction/predict",
-    data,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`, // ✅ VERY IMPORTANT
-      },
-    }
-  );
+// ✅ PREDICTION API
+export const predictPCOS = (data) => {
+  return api.post("/prediction/predict", data);
 };
+
+// ✅ RECOMMENDATION API
+export const getRecommendation = (data) => {
+  return api.post("/recommendation/", data);
+};
+
 export default api;
