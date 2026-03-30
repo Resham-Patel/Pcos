@@ -1,0 +1,111 @@
+:root {
+  --legal-bg: #f8f4f6;
+  --legal-card: #ffffff;
+  --legal-text: #1f1a22;
+  --legal-muted: #6f6a73;
+  --legal-pink: #c94c72;
+  --legal-soft-pink: #fceef3;
+  --legal-shadow: 0 12px 28px rgba(0, 0, 0, 0.05);
+}
+
+.legal-page {
+  min-height: 100vh;
+  background: var(--legal-bg);
+  padding: 48px 20px 80px;
+}
+
+.legal-container {
+  max-width: 960px;
+  margin: 0 auto;
+  background: var(--legal-card);
+  border-radius: 30px;
+  padding: 42px 36px;
+  box-shadow: var(--legal-shadow);
+}
+
+.legal-badge {
+  display: inline-block;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--legal-soft-pink);
+  color: var(--legal-pink);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.legal-container h1 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  color: var(--legal-text);
+  margin-bottom: 14px;
+  line-height: 1.1;
+}
+
+.legal-intro {
+  color: var(--legal-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 28px;
+  max-width: 760px;
+}
+
+.legal-section {
+  margin-bottom: 28px;
+  padding: 22px;
+  border-radius: 22px;
+  background: #fcfbfc;
+}
+
+.legal-section h2 {
+  color: var(--legal-text);
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.legal-section p {
+  color: var(--legal-muted);
+  line-height: 1.75;
+  font-size: 0.96rem;
+}
+
+.legal-list {
+  padding-left: 20px;
+  color: var(--legal-muted);
+  line-height: 1.8;
+}
+
+.support-card {
+  background: linear-gradient(180deg, #fff7fa, #fffdfd);
+  border: 1px solid #f6e7ee;
+}
+
+.support-highlight {
+  margin-top: 10px;
+  color: var(--legal-pink) !important;
+  font-weight: 700;
+  font-size: 1.05rem !important;
+}
+
+.legal-footer-note {
+  margin-top: 10px;
+  color: #918a94;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .legal-page {
+    padding: 28px 14px 60px;
+  }
+
+  .legal-container {
+    padding: 28px 20px;
+    border-radius: 22px;
+  }
+
+  .legal-section {
+    padding: 18px;
+    border-radius: 18px;
+  }
+}

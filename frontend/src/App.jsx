@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Predict from "./pages/Predict";
-import Chat from "./pages/Chat";
+import Chatbot from "./pages/chat";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login"; // 1. Ensure Login is imported
 import Recommendation from "./pages/Recommendation";
@@ -14,6 +14,9 @@ import SymptomPageAwareness from "./pages/SymptomPage_Awareness";
 import MythVsFactAwareness from "./pages/mythVsFact_awareness";
 import HormoneBalanceAwareness from "./pages/hormoneBalance_awareness";
 import ExerciseGuideAwareness from "./pages/exerciseGuide_awareness";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import MedicalDisclaimer from "./pages/MedicalDisclaimer";
+import ContactSupport from "./pages/ContactSupport";
 
 function App() {
   const location = useLocation();
@@ -32,12 +35,15 @@ function App() {
           <Route path="/awareness" element={<Awareness />} />
           <Route path="/predict" element={<Predict />} />
           <Route path="/tracking" element={<Tracking />} />
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/recommendations" element={<Recommendation />} />
           <Route path="/symptoms-awareness" element={<SymptomPageAwareness />} />
           <Route path="/hormone-balance-awareness" element={<HormoneBalanceAwareness />} />
           <Route path="/myth-vs-fact-awareness" element={<MythVsFactAwareness />} />
           <Route path="/exercise-guide-awareness" element={<ExerciseGuideAwareness />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/medical-disclaimer" element={<MedicalDisclaimer />} />
+          <Route path="/contact-support" element={<ContactSupport />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
         </Routes>

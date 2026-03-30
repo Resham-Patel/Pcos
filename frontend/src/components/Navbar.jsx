@@ -17,7 +17,7 @@ const Navbar = () => {
         <li><NavLink to="/awareness">Awareness</NavLink></li>
         <li><NavLink to="/predict">Prediction</NavLink></li>
         <li><NavLink to="/tracking">Tracking</NavLink></li>
-        <li><NavLink to="/chat">AI Chat</NavLink></li>
+        <li><NavLink to="/chatbot">AI Chat</NavLink></li>
       </ul>
 
       <div className="nav-actions">
