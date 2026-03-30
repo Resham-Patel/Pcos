@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/predict.css";
+import { predictPCOS } from "../services/api";
 
 const Predict = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +17,8 @@ const Predict = () => {
     pimples: false,
   });
 
+  const [result, setResult] = useState(null);
+
   useEffect(() => {
     if (formData.weight && formData.height) {
       const heightInMeters = formData.height / 100;
@@ -23,6 +26,7 @@ const Predict = () => {
         formData.weight /
         (heightInMeters * heightInMeters)
       ).toFixed(2);
+
       setFormData((prev) => ({ ...prev, bmi: bmiValue }));
     }
   }, [formData.weight, formData.height]);
@@ -34,6 +38,18 @@ const Predict = () => {
 
   const handleToggle = (field) => {
     setFormData((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
+
+  // ✅ API CALL
+  const handlePredict = async () => {
+    try {
+      const res = await predictPCOS(formData);
+      console.log(res.data);
+      setResult(res.data);
+    } catch (err) {
+      console.log(err);
+      alert("Prediction failed");
+    }
   };
 
   return (
@@ -158,9 +174,12 @@ const Predict = () => {
           </div>
         </div>
 
-        <button className="predict-btn">Predict Outcome 📊</button>
+        {/* ✅ FIXED BUTTON */}
+        <button className="predict-btn" onClick={handlePredict}>
+          Predict Outcome 📊
+        </button>
 
-        {/* --- Results Section (Inside Form Card) --- */}
+        {/* --- Results Section --- */}
         <div className="results-wrapper">
           <div className="result-card">
             <div className="result-header">
@@ -171,9 +190,15 @@ const Predict = () => {
               <div className="outcome-icon">🛡️</div>
               <div className="outcome-details">
                 <p className="outcome-label">Probable Outcome</p>
-                <h2 className="outcome-value">Pending Input</h2>
+
+                {/* ✅ FIXED RESULT */}
+                <h2 className="outcome-value">
+                  {result ? result.prediction : "Pending Input"}
+                </h2>
+
               </div>
             </div>
+
             <div className="suggestions-list">
               <p className="suggestions-title">Key Suggestions:</p>
               <ul>
@@ -188,8 +213,7 @@ const Predict = () => {
               </ul>
             </div>
           </div>
-          {/* --- Upgraded Recommendation Access CTA --- */}
-          {/* --- Recommendation Access CTA --- */}
+
           <div className="recommendation-cta">
             <div className="cta-content">
               <h3>Personalized Wellness Plan</h3>
@@ -205,6 +229,7 @@ const Predict = () => {
               View My Plan <span>→</span>
             </button>
           </div>
+
           <div className="info-card">
             <div className="info-header">
               <h4>Understanding PCOS</h4>
@@ -232,6 +257,7 @@ const Predict = () => {
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );

@@ -44,7 +44,7 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/medical-disclaimer" element={<MedicalDisclaimer />} />
           <Route path="/contact-support" element={<ContactSupport />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/register" element={<Signup />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </main>

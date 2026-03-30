@@ -1,52 +1,91 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/signup.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../styles/signup.css";
+import { loginUser } from "../services/api";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await loginUser(form);
+
+      console.log(res.data);
+
+      // ✅ store token
+      localStorage.setItem("token", res.data.access_token);
+
+      alert("Login successful!");
+
+      // ✅ redirect to dashboard (you can change route)
+      navigate("/dashboard");
+
+    } catch (err) {
+      console.log(err);
+      alert("Invalid credentials");
+    }
+  };
+
   return (
     <div className="auth-page-wrapper">
       <div className="auth-card">
-        {/* Left Side: Visual/Branding Section */}
+
         <div className="auth-visual">
           <div className="visual-overlay"></div>
           <div className="visual-content">
             <h2 className="brand-name">FemWell</h2>
             <div className="hero-text-group">
-
               <h1>Your journey to hormonal harmony starts here.</h1>
               <div className="quote-block">
                 <p>“Healing is not a destination, it’s the grace you give yourself every single day.”</p>
               </div>
             </div>
-
-
           </div>
         </div>
 
-        {/* Right Side: Form Section */}
         <div className="auth-form-side">
           <div className="form-container">
             <h2>Welcome!</h2>
             <p className="subtitle">Access your personalized wellness tracking and AI guidance.</p>
 
-            <form className="login-form">
+            <form className="login-form" onSubmit={handleSubmit}>
 
               <div className="input-field">
                 <label>Email Address</label>
-                <input type="email" placeholder="name@example.com" />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="name@example.com"
+                  onChange={handleChange}
+                />
               </div>
 
               <div className="input-field">
                 <div className="label-row">
                   <label>Password</label>
-                  <a href="#" className="forgot-link">FORGOT?</a>
+                  <span className="forgot-link">FORGOT?</span>
                 </div>
-                <div className="password-input-wrapper">
-                  <input type="password" placeholder="Password" />
-                </div>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  onChange={handleChange}
+                />
               </div>
-
-
 
               <button type="submit" className="btn-enter">
                 Get Started
@@ -54,13 +93,12 @@ const Login = () => {
             </form>
 
             <p className="switch-auth">
-              Don't have an account? <a href="/signup">Signup</a>
+              Don't have an account? <Link to="/register">Signup</Link>
             </p>
           </div>
         </div>
       </div>
 
-      {/* External Footer Links */}
       <footer className="auth-footer">
         <div className="footer-links">
           <Link to="/privacy-policy">Privacy Policy</Link>

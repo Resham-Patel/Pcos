@@ -27,7 +27,7 @@ const Navbar = () => {
         </Link>
 
         {/* Sign Up Button - Primary Action */}
-        <Link to="/signup" className="btn-signup">
+        <Link to="/register" className="btn-signup">
           Sign up
         </Link>
       </div>
