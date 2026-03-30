@@ -1,15 +1,14 @@
 import os
-import requests
 from dotenv import load_dotenv
-import json
-import re
+from openai import OpenAI
 
 load_dotenv()
 
+api_key = os.getenv("OPENAI_API_KEY")
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-# Initialize client
-# client = genai.Client(api_key=api_key) if api_key else None
+# Initialize client only if key exists
+client = OpenAI(api_key=api_key) if api_key else None
+
 
 # 🔹 Rule-based
 def generate_rules(symptoms, prediction):
@@ -33,68 +32,30 @@ def generate_rules(symptoms, prediction):
     return rules
 
 
+# 🔹 OpenAI (SAFE)
 def generate_ai_recommendation(rules):
-    if not OPENROUTER_API_KEY:
-        return "AI recommendation not available"
-
-    if not rules:
-        return "No major issues detected. Maintain a healthy lifestyle."
+    # If no API key → skip AI
+    if not client:
+        return "AI recommendation not available (API key missing)"
 
     try:
-        rules_text = "\n".join(f"- {rule}" for rule in rules)
-
         prompt = f"""
-You are a helpful health assistant.
+        Based on these conditions: {rules}
+        Give short, friendly health advice for PCOS.
+        """
 
-Based on these conditions:
-{rules_text}
-
-STRICTLY return ONLY valid JSON (no explanation, no text).
-
-Format:
-{{
-  "diet": "short advice",
-  "exercise": "short advice",
-  "lifestyle": "short advice",
-  "notes": "short advice"
-}}
-"""
-
-        response = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                "Content-Type": "application/json",
-                "HTTP-Referer": "http://localhost",
-                "X-Title": "PCOS Recommendation System"
-            },
-            json={
-                "model": "openai/gpt-4o-mini",
-                "messages": [
-                    {"role": "user", "content": prompt}
-                ]
-            }
+        response = client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=[{"role": "user", "content": prompt}]
         )
 
-        result = response.json()
-        content = result["choices"][0]["message"]["content"]
-
-        # 🔥 Safe JSON parsing (IMPORTANT)
-        match = re.search(r"\{.*\}", content, re.DOTALL)
-
-        if match:
-            try:
-                return json.loads(match.group())
-            except Exception as e:
-                print("JSON Parse Error:", e)
-
-        # fallback
-        return {"raw_response": content}
+        return response.choices[0].message.content
 
     except Exception as e:
-        print("OpenRouter Error:", e)
-        return "AI recommendation failed"
-    
+        print("OpenAI Error:", e)
+        return "AI recommendation failed, showing basic advice only."
+
+
 # 🔹 FINAL FUNCTION
 def get_recommendation(symptoms, prediction):
     rules = generate_rules(symptoms, prediction)
