@@ -180,7 +180,7 @@ const MythVsFactAwareness = () => {
             Log in to explore prediction, recommendations, and tracking features
             designed to support your PCOS wellness journey.
           </p>
-          <button className="myth-primary-btn">
+          <button className="myth-primary-btn" onClick={() => (window.location.href = '/login')}>
             Explore More (Login Required)
           </button>
         </div>
