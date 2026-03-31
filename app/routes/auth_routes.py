@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.schemas.user_schema import UserCreate, UserResponse
-from app.schemas.auth_schema import LoginRequest, TokenResponse
-from app.services.auth_service import register_user, login_user
+from app.schemas.auth_schema import LoginRequest, TokenResponse, ForgotPasswordRequest, ResetPasswordRequest
+from app.services.auth_service import register_user, login_user, forgot_password, reset_password
 
 router = APIRouter()
 
@@ -28,3 +28,12 @@ def login(user: LoginRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
     return {"access_token": token, "token_type": "bearer"}
+
+@router.post("/forgot-password")
+def forgot_password_route(data: ForgotPasswordRequest, db: Session = Depends(get_db)):
+    return forgot_password(db, data.email)
+
+
+@router.post("/reset-password")
+def reset_password_route(data: ResetPasswordRequest, db: Session = Depends(get_db)):
+    return reset_password(db, data.token, data.new_password)

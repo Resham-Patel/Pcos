@@ -77,7 +77,11 @@ const Login = () => {
               <div className="input-field">
                 <div className="label-row">
                   <label>Password</label>
-                  <span className="forgot-link">FORGOT?</span>
+                  <div className="forgot-link-wrap">
+                    <Link to="/forgot-password" className="forgot-link">
+                      Forgot Password?
+                    </Link>
+                  </div>
                 </div>
                 <input
                   type="password"

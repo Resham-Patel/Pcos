@@ -275,33 +275,16 @@ const Predict = () => {
           </div>
 
           <div className="info-card">
-            <div className="info-header">
-              <h4>Understanding PCOS</h4>
-              <p>Hormonal balance affects more than just cycles.</p>
-            </div>
-            <div className="info-grid">
-              <div className="info-item">
-                <div className="item-icon">🍎</div>
-                <span>Dietary Care</span>
-              </div>
-              <div className="info-item">
-                <div className="item-icon">🏋️</div>
-                <span>Activity</span>
-              </div>
-            </div>
-            <div className="support-footer">
-              <div className="support-icon">💜</div>
-              <div className="support-text">
-                <strong>You're not alone.</strong>
-                <p>
-                  PCOS affects 1 in 10 women globally. Managing it is a journey
-                  of self-love.
-                </p>
-              </div>
+            <div className="support-icon">💜</div>
+            <div className="support-text">
+              <strong>You're not alone.</strong>
+              <p>
+                PCOS affects 1 in 10 women globally. Managing it is a journey
+                of self-love.
+              </p>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

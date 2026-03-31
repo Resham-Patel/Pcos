@@ -5,6 +5,8 @@ import Predict from "./pages/Predict";
 import Chatbot from "./pages/chat";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login"; // 1. Ensure Login is imported
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Recommendation from "./pages/Recommendation";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -46,6 +48,8 @@ function App() {
           <Route path="/contact-support" element={<ContactSupport />} />
           <Route path="/register" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </main>
 
