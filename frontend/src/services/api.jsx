@@ -4,7 +4,7 @@ const api = axios.create({
   baseURL: "http://localhost:8000",
 });
 
-// 🔐 Attach token automatically
+//  Attach token automatically
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -19,20 +19,22 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// 🔥 AUTH APIs
+//  AUTH APIs
 export const loginUser = (data) => api.post("/login", data);
 export const registerUser = (data) => api.post("/register", data);
 export const forgotPassword = (data) => api.post("/forgot-password", data);
 export const resetPassword = (data) => api.post("/reset-password", data);
 
-// ✅ PREDICTION API
-export const predictPCOS = (data) => {
-  return api.post("/prediction/predict", data);
-};
+//  PREDICTION API
+export const predictPCOS = (data) => {return api.post("/prediction/predict", data);};
 
-// ✅ RECOMMENDATION API
-export const getRecommendation = (data) => {
-  return api.post("/recommendation/", data);
-};
+//  RECOMMENDATION API
+export const getRecommendation = (data) => {return api.post("/recommendation/", data);};
+
+// TRACKING APIs
+export const getCycle = () => api.get("/tracking/cycle");
+export const saveCycle = (data) => api.post("/tracking/cycle", data);
+export const getSymptoms = () => api.get("/tracking/symptoms");
+export const logSymptom = (data) => api.post("/tracking/symptoms", data);
 
 export default api;

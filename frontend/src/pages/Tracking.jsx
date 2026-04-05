@@ -1,72 +1,49 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "../styles/tracking.css";
+import { getCycle, getSymptoms, logSymptom } from "../services/api";
 
 const TrackingPage = () => {
-  // Example cycle data
-  const cycleLength = 28;
-  const periodLength = 5;
-
-  // Example last period start date
-  const lastPeriodStart = new Date(2026, 2, 6); // March 6, 2026
-
+  const [cycleData, setCycleData] = useState(null);
+  const [symptoms, setSymptoms] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(
     new Date(new Date().getFullYear(), new Date().getMonth(), 1)
   );
 
+  const [showSymptomForm, setShowSymptomForm] = useState(false);
+  const [symptomForm, setSymptomForm] = useState({
+    date: new Date().toISOString().split("T")[0],
+    symptom_name: "",
+    severity: "mild",
+  });
+
   const today = new Date();
+
+  useEffect(() => {
+    fetchTrackingData();
+  }, []);
+
+  const fetchTrackingData = async () => {
+    try {
+      const cycleRes = await getCycle();
+      const symptomRes = await getSymptoms();
+
+      setCycleData(cycleRes.data || null);
+      setSymptoms(symptomRes.data || []);
+    } catch (err) {
+      console.log("Tracking fetch error:", err);
+    }
+  };
+
+  const cycleLength = cycleData?.cycle_length || 28;
+  const periodLength = cycleData?.period_length || 5;
+  const lastPeriodStart = cycleData?.last_period_start
+    ? new Date(cycleData.last_period_start)
+    : new Date(2026, 2, 6);
 
   const monthLabel = currentMonth.toLocaleString("en-US", {
     month: "long",
     year: "numeric",
   });
-
-  const calendarData = useMemo(() => {
-    const year = currentMonth.getFullYear();
-    const month = currentMonth.getMonth();
-
-    const firstDayOfMonth = new Date(year, month, 1);
-    const lastDayOfMonth = new Date(year, month + 1, 0);
-
-    // Monday-first calendar
-    let startWeekday = firstDayOfMonth.getDay(); // Sunday=0
-    startWeekday = startWeekday === 0 ? 6 : startWeekday - 1; // Monday=0
-
-    const daysInMonth = lastDayOfMonth.getDate();
-
-    const prevMonthLastDay = new Date(year, month, 0).getDate();
-
-    const days = [];
-
-    // Previous month filler
-    for (let i = startWeekday - 1; i >= 0; i--) {
-      days.push({
-        date: new Date(year, month - 1, prevMonthLastDay - i),
-        day: prevMonthLastDay - i,
-        muted: true,
-      });
-    }
-
-    // Current month days
-    for (let day = 1; day <= daysInMonth; day++) {
-      days.push({
-        date: new Date(year, month, day),
-        day,
-        muted: false,
-      });
-    }
-
-    // Next month filler to complete grid
-    const remaining = (7 - (days.length % 7)) % 7;
-    for (let i = 1; i <= remaining; i++) {
-      days.push({
-        date: new Date(year, month + 1, i),
-        day: i,
-        muted: true,
-      });
-    }
-
-    return days;
-  }, [currentMonth]);
 
   const isSameDate = (d1, d2) =>
     d1.getFullYear() === d2.getFullYear() &&
@@ -91,10 +68,61 @@ const TrackingPage = () => {
     return cycleDay !== null && cycleDay >= 0 && cycleDay < periodLength;
   };
 
+  const isSymptomDay = (date) => {
+    return symptoms.some((symptom) => {
+      const symptomDate = new Date(symptom.date);
+      return isSameDate(symptomDate, date);
+    });
+  };
+
+  const calendarData = useMemo(() => {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+
+    const firstDayOfMonth = new Date(year, month, 1);
+    const lastDayOfMonth = new Date(year, month + 1, 0);
+
+    let startWeekday = firstDayOfMonth.getDay();
+    startWeekday = startWeekday === 0 ? 6 : startWeekday - 1;
+
+    const daysInMonth = lastDayOfMonth.getDate();
+    const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+    const days = [];
+
+    for (let i = startWeekday - 1; i >= 0; i--) {
+      days.push({
+        date: new Date(year, month - 1, prevMonthLastDay - i),
+        day: prevMonthLastDay - i,
+        muted: true,
+      });
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      days.push({
+        date: new Date(year, month, day),
+        day,
+        muted: false,
+      });
+    }
+
+    const remaining = (7 - (days.length % 7)) % 7;
+    for (let i = 1; i <= remaining; i++) {
+      days.push({
+        date: new Date(year, month + 1, i),
+        day: i,
+        muted: true,
+      });
+    }
+
+    return days;
+  }, [currentMonth]);
+
   const nextPeriodStart = useMemo(() => {
     const diff = dayDiff(lastPeriodStart, today);
     const cyclesPassed = Math.floor(Math.max(diff, 0) / cycleLength);
     let next = new Date(lastPeriodStart);
+
     next.setDate(lastPeriodStart.getDate() + (cyclesPassed + 1) * cycleLength);
 
     if (isSameDate(next, today) || next < today) {
@@ -102,7 +130,7 @@ const TrackingPage = () => {
     }
 
     return next;
-  }, [today]);
+  }, [cycleLength, cycleData]);
 
   const daysUntilNextPeriod = Math.max(dayDiff(today, nextPeriodStart), 0);
 
@@ -113,7 +141,7 @@ const TrackingPage = () => {
     if (cycleDay < 13) return "Follicular Phase";
     if (cycleDay < 16) return "Ovulation Phase";
     return "Luteal Phase";
-  }, [today]);
+  }, [cycleLength, periodLength, cycleData]);
 
   const formattedNextPeriod = nextPeriodStart.toLocaleString("en-US", {
     month: "long",
@@ -132,11 +160,41 @@ const TrackingPage = () => {
     );
   };
 
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setSymptomForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleLogSymptoms = async (e) => {
+    e.preventDefault();
+
+    try {
+      await logSymptom(symptomForm);
+
+      await fetchTrackingData();
+
+      setSymptomForm({
+        date: new Date().toISOString().split("T")[0],
+        symptom_name: "",
+        severity: "mild",
+      });
+
+      setShowSymptomForm(false);
+      alert("Symptoms logged successfully");
+    } catch (err) {
+      console.log("Log symptom error:", err);
+      alert("Failed to log symptoms");
+    }
+  };
+
   return (
     <div className="tracking-page">
       <div className="tracking-container">
         <section className="hero-text">
-          <h1>Cycle Tracking</h1><br></br>
+          <h1>Cycle Tracking</h1>
           <p>
             Your cycle is in the <span>{cyclePhase}</span>. You might feel a
             boost in energy today.
@@ -172,14 +230,16 @@ const TrackingPage = () => {
                 {calendarData.map((item, index) => {
                   const isToday = isSameDate(item.date, today);
                   const isPeriod = isPeriodDay(item.date);
+                  const hasSymptom = isSymptomDay(item.date);
 
                   return (
                     <div
                       key={index}
-                      className={`calendar-day 
+                      className={`calendar-day
                         ${item.muted ? "muted" : ""}
-                        ${isPeriod ? "light-pink" : ""}
+                        ${isPeriod ? "period-day" : ""}
                         ${isToday ? "active" : ""}
+                        ${hasSymptom ? "symptom-day" : ""}
                       `}
                     >
                       {item.day}
@@ -196,15 +256,84 @@ const TrackingPage = () => {
               <p className="label">Next Period</p>
               <h2>{daysUntilNextPeriod} Days</h2>
               <p className="sub-label">Predicted: {formattedNextPeriod}</p>
-              <button className="primary-btn">Log Symptoms</button>
+              <button
+                className="primary-btn"
+                onClick={() => setShowSymptomForm(true)}
+              >
+                Log Symptoms
+              </button>
             </div>
           </div>
         </section>
 
+        {showSymptomForm && (
+          <section className="card symptom-form-card">
+            <div className="section-header">
+              <h2>Enter Symptoms</h2>
+            </div>
+
+            <form onSubmit={handleLogSymptoms} className="symptom-form">
+              <div className="input-group">
+                <label>Date</label>
+                <input
+                  type="date"
+                  name="date"
+                  value={symptomForm.date}
+                  onChange={handleFormChange}
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Symptom</label>
+                <select
+                  name="symptom_name"
+                  value={symptomForm.symptom_name}
+                  onChange={handleFormChange}
+                  required
+                >
+                  <option value="">Select symptom</option>
+                  <option value="Acne">Acne</option>
+                  <option value="Fatigue">Fatigue</option>
+                  <option value="Cravings">Cravings</option>
+                  <option value="Bloating">Bloating</option>
+                  <option value="Headache">Headache</option>
+                  <option value="Cramps">Cramps</option>
+                  <option value="Mood Swings">Mood Swings</option>
+                </select>
+              </div>
+
+              <div className="input-group">
+                <label>Severity</label>
+                <select
+                  name="severity"
+                  value={symptomForm.severity}
+                  onChange={handleFormChange}
+                >
+                  <option value="mild">Mild</option>
+                  <option value="medium">Medium</option>
+                  <option value="severe">Severe</option>
+                </select>
+              </div>
+
+              <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
+                <button type="submit" className="primary-btn">
+                  Save Symptoms
+                </button>
+                <button
+                  type="button"
+                  className="primary-btn"
+                  onClick={() => setShowSymptomForm(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </section>
+        )}
+
         <section className="metrics-section">
           <div className="section-header">
             <h2>Health Metrics</h2>
-            <span>View Insights</span>
           </div>
 
           <div className="metrics">
@@ -257,21 +386,21 @@ const TrackingPage = () => {
           </div>
 
           <div className="symptoms-row">
-            <div className="symptom-pill">
-              <div className="symptom-icon pink-lite">Ac</div>
-              <div>
-                <h4>Mild Acne</h4>
-                <p>Logged 2h ago</p>
-              </div>
-            </div>
-
-            <div className="symptom-pill">
-              <div className="symptom-icon purple-lite">Fa</div>
-              <div>
-                <h4>Fatigue</h4>
-                <p>Logged 6h ago</p>
-              </div>
-            </div>
+            {symptoms.length > 0 ? (
+              symptoms.slice(-4).reverse().map((symptom) => (
+                <div className="symptom-pill" key={symptom.id}>
+                  <div className="symptom-icon pink-lite">
+                    {symptom.symptom_name?.slice(0, 2) || "Sy"}
+                  </div>
+                  <div>
+                    <h4>{symptom.symptom_name}</h4>
+                    <p>{symptom.severity}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No symptoms logged yet.</p>
+            )}
           </div>
         </section>
 
