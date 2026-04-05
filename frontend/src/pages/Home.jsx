@@ -27,7 +27,7 @@ const Home = () => {
       desc: "Access immediate, compassionate guidance with 24/7 AI-driven support.",
       icon: "🤖",
       btnText: "TALK TO US NOW",
-      link: "/chat",
+      link: "/chatbot",
       colorClass: "green-glass"
     }
   ];
@@ -115,7 +115,7 @@ const Home = () => {
             
             <button 
               className="btn-accent" 
-              onClick={() => navigate('/signup')}
+              onClick={() => navigate('/register')}
             >
               Get Early Access
             </button>
