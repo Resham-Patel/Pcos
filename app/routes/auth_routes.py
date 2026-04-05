@@ -29,6 +29,7 @@ def login(user: LoginRequest, db: Session = Depends(get_db)):
 
     return token   # ✅ FIXED
 
+
 @router.post("/forgot-password")
 def forgot_password_route(data: ForgotPasswordRequest, db: Session = Depends(get_db)):
     return forgot_password(db, data.email)
