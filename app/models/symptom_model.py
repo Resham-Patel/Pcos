@@ -6,6 +6,16 @@ class DailyLog(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+
     date = Column(Date, nullable=False)
-    symptom_name = Column(String, nullable=False)   # Acne, Fatigue, Cravings, etc.
-    severity = Column(String, nullable=True)        # mild, medium, severe
+
+    stress = Column(String, nullable=True)          # low, medium, high
+    sleep_hours = Column(Integer, nullable=True)    # e.g. 5, 6, 7
+    exercise_days = Column(Integer, nullable=True)  # 0 to 7
+    fatigue = Column(String, nullable=True)         # yes / no
+    mood = Column(String, nullable=True)            # happy, okay, low, anxious
+    acne = Column(String, nullable=True)            # yes / no
+    sugar_intake = Column(String, nullable=True)    # low, moderate, high
+    junk_food = Column(String, nullable=True)       # rare, sometimes, frequent
+    water_intake = Column(String, nullable=True)    # low, good
+    bloating = Column(String, nullable=True)        # yes / no

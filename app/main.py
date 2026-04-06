@@ -11,6 +11,7 @@ from app.routes.prediction_routes import router as prediction_router
 # from app.routes.symptom_routes import router as symptom_router
 from app.routes.recommendation_routes import router as recommendation_routes
 from app.routes.tracking_routes import router as tracking_router
+from app.routes.chatbot_routes import router as chatbot_routes
 
 
 app = FastAPI()
@@ -36,3 +37,4 @@ app.include_router(prediction_router)
 # app.include_router(symptom_router)
 app.include_router(recommendation_routes)
 app.include_router(tracking_router) 
+app.include_router(chatbot_routes)

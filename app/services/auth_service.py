@@ -9,28 +9,27 @@ from app.utils.token import create_access_token
 
 # ---------------- REGISTER ----------------
 def register_user(db: Session, name: str, email: str, password: str):
-
-    # Check if email already exists
     existing_user = db.query(User).filter(User.email == email).first()
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    # bcrypt safe limit
-    if len(password) > 72:
-        raise HTTPException(status_code=400, detail="Password too long (max 72 chars)")
+    hashed_password = hash_password(password[:72])
 
-    user = User(
+    new_user = User(
         name=name,
         email=email,
-        password=hash_password(password[:72])
+        password=hashed_password
     )
 
-    db.add(user)
+    db.add(new_user)
     db.commit()
-    db.refresh(user)
+    db.refresh(new_user)
 
-    return {"message": "User registered successfully"}
-
+    return {
+        "id": new_user.id,
+        "name": new_user.name,
+        "email": new_user.email
+    }
 
 # ---------------- LOGIN ----------------
 def login_user(db: Session, email: str, password: str):

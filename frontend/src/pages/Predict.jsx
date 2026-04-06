@@ -40,7 +40,30 @@ const Predict = () => {
     setFormData((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
-  // ✅ API CALL
+  const getRiskLevel = (probability) => {
+    const prob = probability > 1 ? probability / 100 : probability;
+
+    if (prob >= 0.65) return "High Risk";
+    if (prob >= 0.35) return "Moderate Risk";
+    return "Low Risk";
+  };
+
+  const getRiskMessage = (riskLevel) => {
+    if (riskLevel === "High Risk") {
+      return "Your symptom pattern suggests a higher likelihood profile. Please consider consulting a medical professional for proper evaluation.";
+    }
+    if (riskLevel === "Moderate Risk") {
+      return "Your symptom pattern shows some important indicators. Monitoring your health and following a balanced lifestyle plan is recommended.";
+    }
+    return "Your current symptom pattern suggests a lower likelihood profile, but regular tracking and healthy habits still matter.";
+  };
+
+  const getRiskClass = (riskLevel) => {
+    if (riskLevel === "High Risk") return "risk-high";
+    if (riskLevel === "Moderate Risk") return "risk-moderate";
+    return "risk-low";
+  };
+
   const handlePredict = async () => {
     try {
       const formattedData = {
@@ -55,8 +78,20 @@ const Predict = () => {
       console.log(res.data);
       setResult(res.data);
 
+      const probabilityValue =
+        typeof res.data.probability !== "undefined"
+          ? res.data.probability
+          : typeof res.data.confidence !== "undefined"
+          ? res.data.confidence
+          : 0;
+
+      const normalizedProbability =
+        probabilityValue > 1 ? probabilityValue / 100 : probabilityValue;
+
       const recommendationPayload = {
         prediction: res.data.prediction,
+        probability: Number((normalizedProbability * 100).toFixed(2)),
+        risk_level: getRiskLevel(normalizedProbability),
         age: parseInt(formData.age),
         weight: parseFloat(formData.weight),
         height: parseFloat(formData.height),
@@ -80,6 +115,33 @@ const Predict = () => {
     }
   };
 
+  const probabilityValue =
+    result && typeof result.probability !== "undefined"
+      ? result.probability
+      : result && typeof result.confidence !== "undefined"
+      ? result.confidence
+      : null;
+
+  const normalizedProbability =
+    probabilityValue !== null
+      ? probabilityValue > 1
+        ? probabilityValue / 100
+        : probabilityValue
+      : null;
+
+  const probabilityPercent =
+    normalizedProbability !== null
+      ? (normalizedProbability * 100).toFixed(2)
+      : null;
+
+  const riskLevel =
+    normalizedProbability !== null
+      ? getRiskLevel(normalizedProbability)
+      : "Pending Input";
+
+  const riskClass =
+    normalizedProbability !== null ? getRiskClass(riskLevel) : "";
+
   return (
     <div className="predict-container">
       <header className="predict-header">
@@ -92,7 +154,6 @@ const Predict = () => {
       </header>
 
       <div className="form-card">
-        {/* Vital Metrics */}
         <div className="form-section">
           <h3>
             <span className="icon">👤</span> Vital Metrics
@@ -143,7 +204,6 @@ const Predict = () => {
           </div>
         </div>
 
-        {/* Clinical Indicators */}
         <div className="form-section">
           <h3>
             <span className="icon">📉</span> Clinical Indicators
@@ -171,7 +231,6 @@ const Predict = () => {
           </div>
         </div>
 
-        {/* Lifestyle Factors */}
         <div className="form-section">
           <h3>
             <span className="icon">🍎</span> Lifestyle Factors
@@ -202,38 +261,44 @@ const Predict = () => {
           </div>
         </div>
 
-        {/* ✅ FIXED BUTTON */}
         <button className="predict-btn" onClick={handlePredict}>
           Predict Outcome 📊
         </button>
 
-        {/* --- Results Section --- */}
         <div className="results-wrapper">
           <div className="result-card">
             <div className="result-header">
               <h3>Prediction Result</h3>
               <span className="status-badge">ANALYSIS READY</span>
             </div>
-            <div className="outcome-box">
-              <div className="outcome-icon">🛡️</div>
-              <div className="outcome-details">
-                <p className="outcome-label">Probable Outcome</p>
 
-                {/* ✅ FIXED RESULT */}
-                <h2 className="outcome-value">
-                  {result
-                    ? result.prediction === 1
-                      ? "High Risk"
-                      : "Low Risk"
-                    : "Pending Input"}
+            <div className={`outcome-box ${riskClass}`}>
+              <div className="outcome-icon">
+                {riskLevel === "High Risk"
+                  ? "⚠️"
+                  : riskLevel === "Moderate Risk"
+                  ? "🩺"
+                  : "🛡️"}
+              </div>
+
+              <div className="outcome-details">
+                <p className="outcome-label">Estimated Risk Level</p>
+
+                <h2 className={`outcome-value ${riskClass}`}>
+                  {riskLevel}
                 </h2>
 
-                {result && (
-                  <p className="confidence-text">
-                    Confidence: {(Math.min(result.confidence * 100, 95)).toFixed(1)}%
+                {probabilityPercent && (
+                  <p className="probability-text">
+                    Risk Probability: {probabilityPercent}%
                   </p>
                 )}
 
+                {probabilityPercent && (
+                  <p className="result-message">
+                    {getRiskMessage(riskLevel)}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -241,12 +306,12 @@ const Predict = () => {
               <p className="suggestions-title">Key Suggestions:</p>
               <ul>
                 <li>
-                  <span className="check-icon">✔️</span> Fill out all fields for
-                  accuracy.
+                  <span className="check-icon">✔️</span>
+                  Complete all fields carefully for a more reliable estimate.
                 </li>
                 <li>
-                  <span className="lock-icon">🔒</span> Consult a medical
-                  professional.
+                  <span className="lock-icon">🔒</span>
+                  This result is a screening estimate and not a medical diagnosis.
                 </li>
               </ul>
             </div>

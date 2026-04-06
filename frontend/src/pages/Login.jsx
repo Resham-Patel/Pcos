@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import "../styles/signup.css";
 import { loginUser } from "../services/api";
+import { loginSuccess } from "../store/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [form, setForm] = useState({
     email: "",
@@ -23,15 +26,22 @@ const Login = () => {
 
     try {
       const res = await loginUser(form);
+      const token = res.data.access_token;
 
-      console.log(res.data);
+      dispatch(loginSuccess({ token }));
 
-      // ✅ store token
-      localStorage.setItem("token", res.data.access_token);
+      // ✅ ADD THIS BLOCK
+      const existingUser = JSON.parse(localStorage.getItem("user")) || {};
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          name: existingUser.name || "User",
+          email: form.email,
+        })
+      );
 
       alert("Login successful!");
-
-      // ✅ redirect to dashboard (you can change route)
       navigate("/dashboard");
 
     } catch (err) {
@@ -43,7 +53,6 @@ const Login = () => {
   return (
     <div className="auth-page-wrapper">
       <div className="auth-card">
-
         <div className="auth-visual">
           <div className="visual-overlay"></div>
           <div className="visual-content">
@@ -51,7 +60,9 @@ const Login = () => {
             <div className="hero-text-group">
               <h1>Your journey to hormonal harmony starts here.</h1>
               <div className="quote-block">
-                <p>“Healing is not a destination, it’s the grace you give yourself every single day.”</p>
+                <p>
+                  “Healing is not a destination, it’s the grace you give yourself every single day.”
+                </p>
               </div>
             </div>
           </div>
@@ -60,17 +71,20 @@ const Login = () => {
         <div className="auth-form-side">
           <div className="form-container">
             <h2>Welcome!</h2>
-            <p className="subtitle">Access your personalized wellness tracking and AI guidance.</p>
+            <p className="subtitle">
+              Access your personalized wellness tracking and AI guidance.
+            </p>
 
             <form className="login-form" onSubmit={handleSubmit}>
-
               <div className="input-field">
                 <label>Email Address</label>
                 <input
                   type="email"
                   name="email"
                   placeholder="name@example.com"
+                  value={form.email}
                   onChange={handleChange}
+                  required
                 />
               </div>
 
@@ -87,7 +101,9 @@ const Login = () => {
                   type="password"
                   name="password"
                   placeholder="Password"
+                  value={form.password}
                   onChange={handleChange}
+                  required
                 />
               </div>
 

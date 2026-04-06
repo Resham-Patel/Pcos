@@ -27,9 +27,18 @@ const Signup = () => {
 
       console.log(res.data);
 
+      // ✅ SAVE USER DATA HERE
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          name: form.name,
+          email: form.email,
+        })
+      );
+
       alert("Signup successful!");
 
-      // ✅ redirect to login
+      // redirect to login
       navigate("/login");
 
     } catch (err) {
@@ -37,6 +46,7 @@ const Signup = () => {
       alert("Signup failed");
     }
   };
+
 
   return (
     <div className="auth-page-wrapper">

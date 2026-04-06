@@ -32,9 +32,13 @@ export const predictPCOS = (data) => {return api.post("/prediction/predict", dat
 export const getRecommendation = (data) => {return api.post("/recommendation/", data);};
 
 // TRACKING APIs
-export const getCycle = () => api.get("/tracking/cycle");
+export const getCycles = () => api.get("/tracking/cycles");
 export const saveCycle = (data) => api.post("/tracking/cycle", data);
 export const getSymptoms = () => api.get("/tracking/symptoms");
 export const logSymptom = (data) => api.post("/tracking/symptoms", data);
+export const getPrediction = () => api.get("/tracking/predict-next-period");
+
+// CHATBOT API
+export const sendMessage = (message) => api.post("/chatbot/", { message });
 
 export default api;

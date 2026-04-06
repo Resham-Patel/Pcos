@@ -1,9 +1,11 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/home.css';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import "../styles/home.css";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   const features = [
     {
@@ -12,7 +14,7 @@ const Home = () => {
       icon: "📊",
       btnText: "LEARN MORE",
       link: "/predict",
-      colorClass: "blue-glass"
+      colorClass: "blue-glass",
     },
     {
       title: "Personalized Care",
@@ -20,7 +22,7 @@ const Home = () => {
       icon: "📅",
       btnText: "VIEW CARE PLANS",
       link: "/recommendations",
-      colorClass: "purple-glass"
+      colorClass: "purple-glass",
     },
     {
       title: "AI Chatbot Support",
@@ -28,27 +30,44 @@ const Home = () => {
       icon: "🤖",
       btnText: "TALK TO US NOW",
       link: "/chatbot",
-      colorClass: "green-glass"
-    }
+      colorClass: "green-glass",
+    },
   ];
 
   return (
     <div className="home-container">
-      {/* 1. Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
           <span className="badge">PCOS Awareness Month</span>
           <h1 className="hero-title">
-            Your Personal <span className="highlight">Sanctuary</span> for Hormonal Balance.
+            Your Personal <span className="highlight">Wellness Companion</span> for Hormonal Balance.
           </h1>
           <p className="hero-description">
-            FemWell is more than a tracker. It’s an intelligent companion 
-            designed to demystify PCOS through clinically-backed awareness 
+            FemWell is more than a tracker. It’s an intelligent companion
+            designed to demystify PCOS through clinically-backed awareness
             and AI-driven insights.
           </p>
+
           <div className="hero-btns">
-            <button className="btn-primary" onClick={() => navigate('/signup')}>Start Your Journey</button>
-            <button className="btn-secondary" onClick={() => navigate('/awareness')}>Learn More</button>
+            {!isAuthenticated ? (
+              <>
+                <button className="btn-primary" onClick={() => navigate("/register")}>
+                  Start Your Journey
+                </button>
+                <button className="btn-secondary" onClick={() => navigate("/login")}>
+                  Login
+                </button>
+              </>
+            ) : (
+              <>
+                <button className="btn-primary" onClick={() => navigate("/dashboard")}>
+                  Go to Dashboard
+                </button>
+                <button className="btn-secondary" onClick={() => navigate("/awareness")}>
+                  Learn More
+                </button>
+              </>
+            )}
           </div>
         </div>
 
@@ -57,7 +76,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 2. Key Features Section (The Cards from your Image) */}
       <section className="features-wrapper">
         <h2 className="section-title">Precision Tools for Your Health</h2>
         <div className="features-grid">
@@ -78,47 +96,21 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 3. Understanding PCOS Section (Bento Grid) */}
-      <section className="pcos-education-wrapper">
-        {/* <div className="section-header-left"> */}
-          {/* <h2 className="pcos-title">Understanding PCOS</h2>
-          <p className="pcos-subtitle">Knowledge is empowerment. Explore expert-curated modules.</p>
-        </div> */}
+      <section className="pcos-education-wrapper"></section>
 
-        {/* <div className="pcos-bento-grid">
-          <div className="pcos-card main-path-card">
-            <div className="path-text">
-              <h3>The Hormonal Symphony</h3>
-              <p>Dive deep into insulin resistance and androgen levels.</p>
-              <a href="#" className="path-link">Explore Path →</a>
-            </div>
-          </div>
-          <div className="pcos-card insight-highlight">
-            <h4>Daily Insight</h4>
-            <p>Magnesium improves insulin sensitivity.</p>
-          </div>
-          <div className="pcos-card community-stack-card">
-            <h4>Community</h4>
-            <div className="avatar-group">
-              <div className="avatar-circle"></div>
-              <div className="avatar-circle"></div>
-              <span className="join-count">+12k</span>
-            </div>
-          </div> */}
-        {/* </div> */}
-      </section>
       <section className="cta-banner-wrapper">
         <div className="cta-card">
           <h2>Ready to reclaim your cycle?</h2>
-         
           <div className="cta-form">
-            
-            <button 
-              className="btn-accent" 
-              onClick={() => navigate('/register')}
-            >
-              Get Early Access
-            </button>
+            {!isAuthenticated ? (
+              <button className="btn-accent" onClick={() => navigate("/register")}>
+                Get Early Access
+              </button>
+            ) : (
+              <button className="btn-accent" onClick={() => navigate("/dashboard")}>
+                Open Dashboard
+              </button>
+            )}
           </div>
         </div>
       </section>

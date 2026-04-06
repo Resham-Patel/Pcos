@@ -5,6 +5,7 @@ import "../styles/recommendation.css";
 const Recommendation = () => {
   const [recommendation, setRecommendation] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [savedAssessment, setSavedAssessment] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -20,8 +21,9 @@ const Recommendation = () => {
         }
 
         const parsedData = JSON.parse(savedData);
-        const response = await getRecommendation(parsedData);
+        setSavedAssessment(parsedData);
 
+        const response = await getRecommendation(parsedData);
         setRecommendation(response.data);
       } catch (error) {
         console.error("Error fetching recommendation:", error);
@@ -32,12 +34,6 @@ const Recommendation = () => {
 
     fetchRecommendation();
   }, []);
-
-  const aiText =
-    recommendation?.ai_generated &&
-      recommendation.ai_generated !== "AI recommendation not available (API key missing)"
-      ? recommendation.ai_generated
-      : "Based on your symptoms and prediction result, focus on consistent lifestyle support, menstrual health monitoring, regular movement, and a balanced diet to improve hormonal wellness.";
 
   if (loading) {
     return (
@@ -59,6 +55,29 @@ const Recommendation = () => {
     );
   }
 
+  const riskLevel =
+    recommendation?.risk_level ||
+    savedAssessment?.risk_level ||
+    "Low Risk";
+
+  const subtitleMap = {
+    "Low Risk":
+      "Your plan is focused on prevention, healthy balance, and maintaining supportive daily habits.",
+    "Moderate Risk":
+      "Your plan is designed to support symptom management and improve daily hormonal wellness.",
+    "High Risk":
+      "Your plan is focused on stronger lifestyle support and more careful symptom monitoring."
+  };
+
+  const disclaimerMap = {
+    "Low Risk":
+      "Disclaimer: This plan supports prevention and healthy lifestyle balance. It is not a medical diagnosis.",
+    "Moderate Risk":
+      "Disclaimer: This plan is for informational purposes and symptom support only. Consult a doctor if symptoms persist or increase.",
+    "High Risk":
+      "Disclaimer: This AI-generated plan is for informational purposes only. Please consult a gynecologist or endocrinologist for medical evaluation."
+  };
+
   return (
     <section className="rec-page">
       <div className="rec-bg-orb rec-bg-orb-one"></div>
@@ -67,7 +86,7 @@ const Recommendation = () => {
       <div className="rec-container">
         <header className="rec-header">
           <div className="top-meta">
-            <span className="badge-pill">AI PERSONALIZED PLAN</span>
+            <span className="badge-pill">{riskLevel.toUpperCase()}</span>
             <span className="date-stamp">March 2026</span>
           </div>
 
@@ -75,16 +94,15 @@ const Recommendation = () => {
             Your Wellness <span className="pink-text">Blueprint</span>
           </h1>
 
-          <p className="rec-subtitle">
-            Your plan is generated from your prediction result and symptom
-            profile to help guide healthier daily choices.
-          </p>
+          <p className="rec-subtitle">{subtitleMap[riskLevel]}</p>
         </header>
 
         <div className="section-head">
           <div>
             <h3>Personalized AI Guidance</h3>
-            <p>AI-generated suggestions tailored to your prediction and symptoms.</p>
+            <p>
+              AI-generated suggestions tailored to your assessment result and symptoms.
+            </p>
           </div>
         </div>
 
@@ -112,7 +130,7 @@ const Recommendation = () => {
           <div>
             <h3>Actionable Tips</h3>
             <p>
-              These suggestions are based on your inputs and prediction outcome.
+              These suggestions are based on your inputs and current risk pattern.
             </p>
           </div>
         </div>
@@ -152,11 +170,7 @@ const Recommendation = () => {
           </button>
         </div>
 
-        <p className="disclaimer-text">
-          Disclaimer: This AI-generated plan is for informational purposes only.
-          Consult a gynecologist or endocrinologist before making major
-          lifestyle changes.
-        </p>
+        <p className="disclaimer-text">{disclaimerMap[riskLevel]}</p>
       </div>
     </section>
   );

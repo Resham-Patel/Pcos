@@ -1,19 +1,42 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "../styles/tracking.css";
-import { getCycle, getSymptoms, logSymptom } from "../services/api";
+import {
+  getCycles,
+  saveCycle,
+  getSymptoms,
+  logSymptom,
+  getPrediction,
+} from "../services/api";
 
 const TrackingPage = () => {
-  const [cycleData, setCycleData] = useState(null);
+  const [cycles, setCycles] = useState([]);
   const [symptoms, setSymptoms] = useState([]);
+  const [prediction, setPrediction] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(
     new Date(new Date().getFullYear(), new Date().getMonth(), 1)
   );
 
+  const [showCycleForm, setShowCycleForm] = useState(false);
   const [showSymptomForm, setShowSymptomForm] = useState(false);
+
+  const [cycleForm, setCycleForm] = useState({
+    last_period_start: "",
+    cycle_length: "",
+    period_length: 5,
+  });
+
   const [symptomForm, setSymptomForm] = useState({
     date: new Date().toISOString().split("T")[0],
-    symptom_name: "",
-    severity: "mild",
+    stress: "",
+    sleep_hours: "",
+    exercise_days: "",
+    fatigue: "",
+    mood: "",
+    acne: "",
+    sugar_intake: "",
+    junk_food: "",
+    water_intake: "",
+    bloating: "",
   });
 
   const today = new Date();
@@ -24,21 +47,44 @@ const TrackingPage = () => {
 
   const fetchTrackingData = async () => {
     try {
-      const cycleRes = await getCycle();
-      const symptomRes = await getSymptoms();
+      const [cyclesRes, symptomsRes] = await Promise.all([
+        getCycles(),
+        getSymptoms(),
+      ]);
 
-      setCycleData(cycleRes.data || null);
-      setSymptoms(symptomRes.data || []);
+      setCycles(cyclesRes.data || []);
+      setSymptoms(symptomsRes.data || []);
+
+      try {
+        const predictionRes = await getPrediction();
+        setPrediction(predictionRes.data);
+      } catch (predictionErr) {
+        setPrediction(null);
+        console.log("Prediction not available yet:", predictionErr);
+      }
     } catch (err) {
       console.log("Tracking fetch error:", err);
     }
   };
 
-  const cycleLength = cycleData?.cycle_length || 28;
-  const periodLength = cycleData?.period_length || 5;
-  const lastPeriodStart = cycleData?.last_period_start
-    ? new Date(cycleData.last_period_start)
-    : new Date(2026, 2, 6);
+  const latestCycle = cycles.length > 0 ? cycles[cycles.length - 1] : null;
+
+  const cycleLength =
+    prediction?.predicted_cycle_length || latestCycle?.cycle_length || 28;
+
+  const periodLength = latestCycle?.period_length || 5;
+
+  const lastPeriodStart =
+    prediction?.last_period_start
+      ? new Date(prediction.last_period_start)
+      : latestCycle?.last_period_start
+        ? new Date(latestCycle.last_period_start)
+        : null;
+
+  const predictedNextPeriodDate =
+    prediction?.predicted_next_period
+      ? new Date(prediction.predicted_next_period)
+      : null;
 
   const monthLabel = currentMonth.toLocaleString("en-US", {
     month: "long",
@@ -58,6 +104,7 @@ const TrackingPage = () => {
   };
 
   const getCycleDay = (date) => {
+    if (!lastPeriodStart) return null;
     const diff = dayDiff(lastPeriodStart, date);
     if (diff < 0) return null;
     return diff % cycleLength;
@@ -119,6 +166,9 @@ const TrackingPage = () => {
   }, [currentMonth]);
 
   const nextPeriodStart = useMemo(() => {
+    if (predictedNextPeriodDate) return predictedNextPeriodDate;
+    if (!lastPeriodStart) return null;
+
     const diff = dayDiff(lastPeriodStart, today);
     const cyclesPassed = Math.floor(Math.max(diff, 0) / cycleLength);
     let next = new Date(lastPeriodStart);
@@ -130,23 +180,28 @@ const TrackingPage = () => {
     }
 
     return next;
-  }, [cycleLength, cycleData]);
+  }, [predictedNextPeriodDate, cycleLength, lastPeriodStart, today]);
 
-  const daysUntilNextPeriod = Math.max(dayDiff(today, nextPeriodStart), 0);
+  const daysUntilNextPeriod = nextPeriodStart
+    ? Math.max(dayDiff(today, nextPeriodStart), 0)
+    : null;
 
   const cyclePhase = useMemo(() => {
+    if (!lastPeriodStart) return "Add cycle records";
     const cycleDay = getCycleDay(today);
     if (cycleDay === null) return "Follicular Phase";
     if (cycleDay < periodLength) return "Menstrual Phase";
     if (cycleDay < 13) return "Follicular Phase";
     if (cycleDay < 16) return "Ovulation Phase";
     return "Luteal Phase";
-  }, [cycleLength, periodLength, cycleData]);
+  }, [cycleLength, periodLength, lastPeriodStart, today]);
 
-  const formattedNextPeriod = nextPeriodStart.toLocaleString("en-US", {
-    month: "long",
-    day: "numeric",
-  });
+  const formattedNextPeriod = nextPeriodStart
+    ? nextPeriodStart.toLocaleString("en-US", {
+      month: "long",
+      day: "numeric",
+    })
+    : "--";
 
   const goToPrevMonth = () => {
     setCurrentMonth(
@@ -160,12 +215,46 @@ const TrackingPage = () => {
     );
   };
 
-  const handleFormChange = (e) => {
+  const handleCycleChange = (e) => {
+    const { name, value } = e.target;
+    setCycleForm((prev) => ({
+      ...prev,
+      [name]: name === "cycle_length" || name === "period_length" ? Number(value) : value,
+    }));
+  };
+
+  const handleSymptomChange = (e) => {
     const { name, value } = e.target;
     setSymptomForm((prev) => ({
       ...prev,
-      [name]: value,
+      [name]:
+        name === "sleep_hours" || name === "exercise_days"
+          ? value === ""
+            ? ""
+            : Number(value)
+          : value,
     }));
+  };
+
+  const handleSaveCycle = async (e) => {
+    e.preventDefault();
+
+    try {
+      await saveCycle(cycleForm);
+      await fetchTrackingData();
+
+      setCycleForm({
+        last_period_start: "",
+        cycle_length: "",
+        period_length: 5,
+      });
+
+      setShowCycleForm(false);
+      alert("Cycle saved successfully");
+    } catch (err) {
+      console.log("Save cycle error:", err);
+      alert("Failed to save cycle");
+    }
   };
 
   const handleLogSymptoms = async (e) => {
@@ -173,20 +262,27 @@ const TrackingPage = () => {
 
     try {
       await logSymptom(symptomForm);
-
       await fetchTrackingData();
 
       setSymptomForm({
         date: new Date().toISOString().split("T")[0],
-        symptom_name: "",
-        severity: "mild",
+        stress: "",
+        sleep_hours: "",
+        exercise_days: "",
+        fatigue: "",
+        mood: "",
+        acne: "",
+        sugar_intake: "",
+        junk_food: "",
+        water_intake: "",
+        bloating: "",
       });
 
       setShowSymptomForm(false);
-      alert("Symptoms logged successfully");
+      alert("Health log saved successfully");
     } catch (err) {
       console.log("Log symptom error:", err);
-      alert("Failed to log symptoms");
+      alert("Failed to save health log");
     }
   };
 
@@ -196,8 +292,8 @@ const TrackingPage = () => {
         <section className="hero-text">
           <h1>Cycle Tracking</h1>
           <p>
-            Your cycle is in the <span>{cyclePhase}</span>. You might feel a
-            boost in energy today.
+            Your cycle is in the <span>{cyclePhase}</span>. Prediction is based on
+            your cycle history and latest health log.
           </p>
         </section>
 
@@ -254,22 +350,113 @@ const TrackingPage = () => {
             <div className="card next-period-card">
               <div className="small-icon">🩸</div>
               <p className="label">Next Period</p>
-              <h2>{daysUntilNextPeriod} Days</h2>
-              <p className="sub-label">Predicted: {formattedNextPeriod}</p>
-              <button
-                className="primary-btn"
-                onClick={() => setShowSymptomForm(true)}
-              >
-                Log Symptoms
-              </button>
+
+              <h2>{cycles.length >= 3 && daysUntilNextPeriod !== null ? `${daysUntilNextPeriod} Days` : "--"}</h2>
+
+              <p className="sub-label">
+                Predicted: {cycles.length >= 3 ? formattedNextPeriod : "--"}
+              </p>
+              {cycles.length < 3 && (
+                <p className="sub-label disclaimer-text">
+                  Please add at least 3 cycle records to enable prediction.
+                </p>
+              )}
+
+              {prediction?.message && (
+                <p className="sub-label">{prediction.message}</p>
+              )}
+
+              {prediction?.message && (
+                <p className="sub-label">{prediction.message}</p>
+              )}
+
+              {prediction?.base_cycle_length && (
+                <p className="sub-label">
+                  Base: {prediction.base_cycle_length} days • Adjustment:{" "}
+                  {prediction.adjustment_score >= 0
+                    ? `+${prediction.adjustment_score}`
+                    : prediction.adjustment_score}
+                </p>
+              )}
+
+              <div style={{ display: "flex", gap: "10px", flexDirection: "column" }}>
+                <button
+                  className="primary-btn"
+                  onClick={() => setShowCycleForm(true)}
+                >
+                  Add Cycle
+                </button>
+                <button
+                  className="primary-btn"
+                  onClick={() => setShowSymptomForm(true)}
+                >
+                  Log Health
+                </button>
+              </div>
             </div>
           </div>
         </section>
 
+        {showCycleForm && (
+          <section className="card symptom-form-card">
+            <div className="section-header">
+              <h2>Add Cycle Record</h2>
+            </div>
+
+            <form onSubmit={handleSaveCycle} className="symptom-form">
+              <div className="input-group">
+                <label>Last Period Start</label>
+                <input
+                  type="date"
+                  name="last_period_start"
+                  value={cycleForm.last_period_start}
+                  onChange={handleCycleChange}
+                  required
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Cycle Length (days)</label>
+                <input
+                  type="number"
+                  name="cycle_length"
+                  value={cycleForm.cycle_length}
+                  onChange={handleCycleChange}
+                  required
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Period Length (days)</label>
+                <input
+                  type="number"
+                  name="period_length"
+                  value={cycleForm.period_length}
+                  onChange={handleCycleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-actions">
+                <button type="submit" className="primary-btn">
+                  Save Cycle
+                </button>
+                <button
+                  type="button"
+                  className="secondary-btn"
+                  onClick={() => setShowCycleForm(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </section>
+        )}
+
         {showSymptomForm && (
           <section className="card symptom-form-card">
             <div className="section-header">
-              <h2>Enter Symptoms</h2>
+              <h2>Enter Health Log</h2>
             </div>
 
             <form onSubmit={handleLogSymptoms} className="symptom-form">
@@ -279,49 +466,152 @@ const TrackingPage = () => {
                   type="date"
                   name="date"
                   value={symptomForm.date}
-                  onChange={handleFormChange}
+                  onChange={handleSymptomChange}
+                  required
                 />
               </div>
 
               <div className="input-group">
-                <label>Symptom</label>
+                <label>Stress</label>
                 <select
-                  name="symptom_name"
-                  value={symptomForm.symptom_name}
-                  onChange={handleFormChange}
-                  required
+                  name="stress"
+                  value={symptomForm.stress}
+                  onChange={handleSymptomChange}
                 >
-                  <option value="">Select symptom</option>
-                  <option value="Acne">Acne</option>
-                  <option value="Fatigue">Fatigue</option>
-                  <option value="Cravings">Cravings</option>
-                  <option value="Bloating">Bloating</option>
-                  <option value="Headache">Headache</option>
-                  <option value="Cramps">Cramps</option>
-                  <option value="Mood Swings">Mood Swings</option>
+                  <option value="">Select stress</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
                 </select>
               </div>
 
               <div className="input-group">
-                <label>Severity</label>
+                <label>Sleep Hours</label>
+                <input
+                  type="number"
+                  name="sleep_hours"
+                  value={symptomForm.sleep_hours}
+                  onChange={handleSymptomChange}
+                  min="0"
+                  max="24"
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Exercise Days / Week</label>
+                <input
+                  type="number"
+                  name="exercise_days"
+                  value={symptomForm.exercise_days}
+                  onChange={handleSymptomChange}
+                  min="0"
+                  max="7"
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Fatigue</label>
                 <select
-                  name="severity"
-                  value={symptomForm.severity}
-                  onChange={handleFormChange}
+                  name="fatigue"
+                  value={symptomForm.fatigue}
+                  onChange={handleSymptomChange}
                 >
-                  <option value="mild">Mild</option>
-                  <option value="medium">Medium</option>
-                  <option value="severe">Severe</option>
+                  <option value="">Select</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
                 </select>
               </div>
 
-              <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
+              <div className="input-group">
+                <label>Mood</label>
+                <select
+                  name="mood"
+                  value={symptomForm.mood}
+                  onChange={handleSymptomChange}
+                >
+                  <option value="">Select mood</option>
+                  <option value="happy">Happy</option>
+                  <option value="okay">Okay</option>
+                  <option value="low">Low</option>
+                  <option value="anxious">Anxious</option>
+                  <option value="irritated">Irritated</option>
+                </select>
+              </div>
+
+              <div className="input-group">
+                <label>Acne</label>
+                <select
+                  name="acne"
+                  value={symptomForm.acne}
+                  onChange={handleSymptomChange}
+                >
+                  <option value="">Select</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+
+              <div className="input-group">
+                <label>Sugar Intake</label>
+                <select
+                  name="sugar_intake"
+                  value={symptomForm.sugar_intake}
+                  onChange={handleSymptomChange}
+                >
+                  <option value="">Select sugar intake</option>
+                  <option value="low">Low</option>
+                  <option value="moderate">Moderate</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+
+              <div className="input-group">
+                <label>Junk Food</label>
+                <select
+                  name="junk_food"
+                  value={symptomForm.junk_food}
+                  onChange={handleSymptomChange}
+                >
+                  <option value="">Select frequency</option>
+                  <option value="rare">Rare</option>
+                  <option value="sometimes">Sometimes</option>
+                  <option value="frequent">Frequent</option>
+                </select>
+              </div>
+
+              <div className="input-group">
+                <label>Water Intake</label>
+                <select
+                  name="water_intake"
+                  value={symptomForm.water_intake}
+                  onChange={handleSymptomChange}
+                >
+                  <option value="">Select</option>
+                  <option value="good">Good</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+
+              <div className="input-group">
+                <label>Bloating</label>
+                <select
+                  name="bloating"
+                  value={symptomForm.bloating}
+                  onChange={handleSymptomChange}
+                >
+                  <option value="">Select</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+
+              <div className="form-actions">
                 <button type="submit" className="primary-btn">
-                  Save Symptoms
+                  Save Health Log
                 </button>
                 <button
                   type="button"
-                  className="primary-btn"
+                  className="secondary-btn"
                   onClick={() => setShowSymptomForm(false)}
                 >
                   Cancel
@@ -339,67 +629,64 @@ const TrackingPage = () => {
           <div className="metrics">
             <div className="metric-card">
               <div className="metric-top">
-                <div className="metric-icon">⚖️</div>
-                <span className="green-badge">-0.8 kg</span>
+                <div className="metric-icon">📅</div>
+                <span className="green-badge">
+                  {cycles.length} Records
+                </span>
               </div>
-              <p className="metric-title">Weight</p>
-              <h3>64.2 kg</h3>
-              <div className="bar-chart">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span className="dark"></span>
-              </div>
+              <p className="metric-title">Cycle History</p>
+              <h3>{cycleLength}d</h3>
             </div>
 
             <div className="metric-card">
               <div className="metric-top">
-                <div className="metric-icon">✳</div>
-                <span className="pink-badge">High</span>
+                <div className="metric-icon">🩺</div>
+                <span className="pink-badge">
+                  {symptoms.length} Logs
+                </span>
               </div>
-              <p className="metric-title">Inflammation</p>
-              <h3>Level 7</h3>
-              <div className="progress-line">
-                <div className="progress-fill"></div>
-              </div>
+              <p className="metric-title">Health Logs</p>
+              <h3>{prediction?.adjustment_score ?? 0}</h3>
             </div>
 
             <div className="metric-card">
               <div className="metric-top">
-                <div className="metric-icon">☾</div>
-                <span className="gray-badge">Normal</span>
+                <div className="metric-icon">✨</div>
+                <span className="gray-badge">Rule Based</span>
               </div>
-              <p className="metric-title">Sleep Score</p>
-              <h3>84/100</h3>
-              <div className="trend">
-                <span className="trend-dot"></span>
-                <span>Improving trend</span>
-              </div>
+              <p className="metric-title">Prediction Type</p>
+              <h3>{prediction?.predicted_cycle_length || "--"}d</h3>
             </div>
           </div>
         </section>
 
         <section className="symptoms-section">
           <div className="section-header">
-            <h2>Recent Symptoms</h2>
+            <h2>Recent Health Logs</h2>
           </div>
 
           <div className="symptoms-row">
             {symptoms.length > 0 ? (
-              symptoms.slice(-4).reverse().map((symptom) => (
-                <div className="symptom-pill" key={symptom.id}>
-                  <div className="symptom-icon pink-lite">
-                    {symptom.symptom_name?.slice(0, 2) || "Sy"}
-                  </div>
+              symptoms.slice(0, 4).map((log) => (
+                <div className="symptom-pill" key={log.id}>
+                  <div className="symptom-icon pink-lite">HL</div>
                   <div>
-                    <h4>{symptom.symptom_name}</h4>
-                    <p>{symptom.severity}</p>
+                    <h4>{new Date(log.date).toDateString()}</h4>
+                    <p>
+                      {[
+                        log.stress && `Stress: ${log.stress}`,
+                        log.fatigue && `Fatigue: ${log.fatigue}`,
+                        log.mood && `Mood: ${log.mood}`,
+                        log.sugar_intake && `Sugar: ${log.sugar_intake}`,
+                      ]
+                        .filter(Boolean)
+                        .join(" • ") || "Health log saved"}
+                    </p>
                   </div>
                 </div>
               ))
             ) : (
-              <p>No symptoms logged yet.</p>
+              <p>No health logs yet.</p>
             )}
           </div>
         </section>
@@ -409,9 +696,9 @@ const TrackingPage = () => {
             <div className="guide-text">
               <h2>Personalized PCOS Guide</h2>
               <p>
-                Based on your current cycle phase and recent fatigue levels, we
-                recommend a high-protein breakfast and 20 mins of light movement
-                today.
+                Based on your cycle history and latest health condition, your next
+                period estimate is dynamically adjusted instead of using only a fixed
+                28-day cycle.
               </p>
             </div>
 

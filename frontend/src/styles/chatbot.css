@@ -1,46 +1,66 @@
 .chat-container {
-  max-width: 800px;
-  margin: 40px auto;
-  height: 80vh;
+  width: 100%;
+  max-width: 1200px;  
+  height: 85vh;
+  margin: 20px auto;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
   overflow: hidden;
 }
 
-/* Chat messages area */
+/* Header */
+.chat-header {
+  padding: 16px;
+  font-weight: 600;
+  background: linear-gradient(180deg, #ff2b7a, #cf0057);
+  color: white;
+  text-align: center;
+}
+
+/* Chat area */
 .chat-box {
   flex: 1;
-  padding: 20px;
+  padding: 16px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 /* Messages */
 .message {
-  max-width: 70%;
+  max-width: 75%;
   padding: 12px 16px;
   border-radius: 16px;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 15px;   /* slightly bigger */
+  line-height: 1.6;
+  word-wrap: break-word;
 }
 
+/* Bot message */
 .message.bot {
   background: #f5f4f7;
+  color: #333;   /* FIXED (was looking white/faded) */
   align-self: flex-start;
 }
 
+/* User message */
 .message.user {
   background: linear-gradient(180deg, #ff2b7a, #cf0057);
-  color: white;
+  color: #fff;   /* keep white here */
   align-self: flex-end;
 }
 
-/* Input area */
+/* Typing */
+.typing {
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Input */
 .input-area {
   display: flex;
   padding: 12px;
@@ -55,14 +75,22 @@
   border: none;
   background: #f5f4f7;
   outline: none;
+  font-size: 14px;
+  color: #333;   /* FIX */
+  align-items: left;
 }
 
 .input-area button {
-  padding: 0 20px;
+  padding: 0 18px;
   border-radius: 999px;
   border: none;
   background: #c94c72;
-  color: white;
+  color: rgb(252, 252, 252);
   font-weight: 600;
   cursor: pointer;
+  transition: 0.2s;
+}
+
+.input-area button:hover {
+  background: #b13f62;
 }
