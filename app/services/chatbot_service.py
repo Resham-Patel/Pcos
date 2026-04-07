@@ -4,7 +4,7 @@ from openai import OpenAI
 
 load_dotenv()
 
-api_key = os.getenv("OPENROUTER_API_KEY")
+api_key = os.getenv("OPENROUTER_API_    KEY")
 
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
@@ -16,9 +16,7 @@ client = OpenAI(
 ) if api_key else None
 
 
-# -------------------------
-# RULE-BASED FIRST
-# -------------------------
+# ----------------RULE-BASED FIRST------------------------
 def rule_based_reply(message, log):
     message = message.lower()
 
@@ -36,9 +34,7 @@ def rule_based_reply(message, log):
     return None
 
 
-# -------------------------
-# AI RESPONSE (OPENROUTER)
-# -------------------------
+# ------------------AI RESPONSE (OPENROUTER)----------------
 def ai_chat_reply(message, log, cycles):
     if not client:
         return "AI service not available. Please try again later."
@@ -110,11 +106,9 @@ Instructions:
         print("Chatbot Error:", e)
         return "Something went wrong. Please try again."
 
-# -------------------------
-# FINAL FUNCTION
-# -------------------------
+# ------------------ FINAL FUNCTION ---------------------
 def generate_chatbot_reply(message, log, cycles):
-    # Try rules first (fast + reliable)
+    # rules first 
     rule = rule_based_reply(message, log)
     if rule:
         return rule

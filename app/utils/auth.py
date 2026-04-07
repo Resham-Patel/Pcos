@@ -2,7 +2,6 @@ from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt, JWTError
 
-# ✅ import from config
 from app.config import SECRET_KEY, ALGORITHM
 
 security = HTTPBearer()
@@ -19,7 +18,7 @@ def get_current_user(
         if user_id is None:
             raise HTTPException(status_code=401, detail="Invalid token")
 
-        return {"id": user_id}
+        return user_id
 
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")

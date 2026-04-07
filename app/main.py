@@ -8,7 +8,6 @@ from app.models.prediction_model import Prediction
 from app.models.chat_model import Chat
 from app.routes.auth_routes import router as auth_router
 from app.routes.prediction_routes import router as prediction_router
-# from app.routes.symptom_routes import router as symptom_router
 from app.routes.recommendation_routes import router as recommendation_routes
 from app.routes.tracking_routes import router as tracking_router
 from app.routes.chatbot_routes import router as chatbot_routes

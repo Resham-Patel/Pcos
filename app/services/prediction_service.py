@@ -18,7 +18,7 @@ def predict_pcos(db, user_id, data):
     user_id=user_id,
     prediction_result=result_text,
     confidence=float(confidence),
-    recommendation=json.dumps(recommendation)   # ✅ FIX
+    recommendation=json.dumps(recommendation)   
 )
 
     db.add(record)

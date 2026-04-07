@@ -3,11 +3,14 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.schemas.prediction_schema import PredictionRequest
 from app.services.prediction_service import predict_pcos
+from app.utils.auth import get_current_user
 
-# Create router
 router = APIRouter(prefix="/prediction", tags=["Prediction"])
 
-# Route
 @router.post("/predict")
-def predict_route(data: PredictionRequest, db: Session = Depends(get_db)):
-    return predict_pcos(db, user_id=1, data=data)
+def predict_route(
+    data: PredictionRequest,
+    db: Session = Depends(get_db),
+    current_user: int = Depends(get_current_user)
+):
+    return predict_pcos(db, user_id=current_user, data=data)

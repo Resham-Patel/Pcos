@@ -6,11 +6,10 @@ class DailyLog(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-
     date = Column(Date, nullable=False)
 
     stress = Column(String, nullable=True)          # low, medium, high
-    sleep_hours = Column(Integer, nullable=True)    # e.g. 5, 6, 7
+    sleep_hours = Column(Integer, nullable=True)    # 5, 6, 7
     exercise_days = Column(Integer, nullable=True)  # 0 to 7
     fatigue = Column(String, nullable=True)         # yes / no
     mood = Column(String, nullable=True)            # happy, okay, low, anxious

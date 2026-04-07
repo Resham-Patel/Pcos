@@ -55,7 +55,6 @@ def login_user(db: Session, email: str, password: str):
 
 
 # ---------------- FORGOT PASSWORD ----------------
-# temporary in-memory storage (for hackathon)
 reset_tokens = {}
 
 def forgot_password(db: Session, email: str):

@@ -27,7 +27,7 @@ def login(user: LoginRequest, db: Session = Depends(get_db)):
     if not token:
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
-    return token   # ✅ FIXED
+    return token
 
 
 @router.post("/forgot-password")
