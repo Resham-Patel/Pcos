@@ -22,8 +22,6 @@ def verify_password(plain_password: str, hashed_password: str):
         return False
 
     plain_password = str(plain_password).strip()
-
-    # VERY IMPORTANT (fixes your error)
     plain_password = plain_password[:72]
 
     return pwd_context.verify(plain_password, hashed_password)

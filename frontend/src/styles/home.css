@@ -198,12 +198,6 @@
 .card-btn:hover { background: var(--text-primary); color: white; }
 
 /* --- 3. UNDERSTANDING PCOS (BENTO) --- */
-.pcos-education-wrapper {
-  width: 100%;
-  max-width: 1200px;
-  margin: 100px auto;
-  padding: 0 5% 100px 5%;
-}
 
 .section-header-left {
   text-align: left;

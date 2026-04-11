@@ -95,9 +95,6 @@ const Home = () => {
           ))}
         </div>
       </section>
-
-      <section className="pcos-education-wrapper"></section>
-
       <section className="cta-banner-wrapper">
         <div className="cta-card">
           <h2>Ready to reclaim your cycle?</h2>

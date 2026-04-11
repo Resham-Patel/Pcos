@@ -121,41 +121,6 @@ const SymptomPageAwareness = () => {
                 </div>
             </section>
 
-            {/* EXAMPLES */}
-            <section className="symptoms-section">
-                <div className="section-heading">
-                    <h2>What it may look like</h2>
-                    <p>
-                        Symptoms often appear in combinations rather than individually.
-                    </p>
-                </div>
-
-                <div className="examples-list">
-                    <div className="example-card">
-                        <div className="example-label">Example 01</div>
-                        <p>
-                            <strong>Acne + irregular periods</strong> may suggest that hormone
-                            levels are affecting both the menstrual cycle and skin.
-                        </p>
-                    </div>
-
-                    <div className="example-card">
-                        <div className="example-label">Example 02</div>
-                        <p>
-                            <strong>Weight gain + fatigue</strong> may be linked with insulin
-                            resistance and changes in metabolism.
-                        </p>
-                    </div>
-
-                    <div className="example-card">
-                        <div className="example-label">Example 03</div>
-                        <p>
-                            <strong>Hair growth + scalp thinning</strong> can sometimes happen
-                            together due to increased androgen activity.
-                        </p>
-                    </div>
-                </div>
-            </section>
 
             {/* CTA */}
             <section className="symptoms-cta">

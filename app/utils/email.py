@@ -33,7 +33,6 @@ If you did not request this, ignore this email.
         msg["From"] = EMAIL
         msg["To"] = to_email
         msg["Subject"] = subject
-
         msg.attach(MIMEText(body, "plain"))
 
         server = smtplib.SMTP("smtp.gmail.com", 587)

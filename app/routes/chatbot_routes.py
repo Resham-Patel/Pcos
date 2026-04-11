@@ -19,14 +19,14 @@ def chatbot(
 
     latest_log = (
         db.query(DailyLog)
-        .filter(DailyLog.user_id == user["id"])
+        .filter(DailyLog.user_id == user)
         .order_by(DailyLog.date.desc())
         .first()
     )
 
     cycles = (
         db.query(Cycle)
-        .filter(Cycle.user_id == user["id"])
+        .filter(Cycle.user_id == user)
         .all()
     )
 

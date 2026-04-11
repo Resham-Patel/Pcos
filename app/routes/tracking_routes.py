@@ -17,7 +17,7 @@ def save_cycle(
     user=Depends(get_current_user)
 ):
     cycle = Cycle(
-        user_id=user["id"],
+        user_id=user,
         last_period_start=data.last_period_start,
         cycle_length=data.cycle_length,
         period_length=data.period_length
@@ -44,7 +44,7 @@ def get_cycles(
 ):
     cycles = (
         db.query(Cycle)
-        .filter(Cycle.user_id == user["id"])
+        .filter(Cycle.user_id == user)
         .order_by(Cycle.last_period_start.asc())
         .all()
     )
@@ -67,7 +67,7 @@ def save_symptoms(
     user=Depends(get_current_user)
 ):
     log = DailyLog(
-        user_id=user["id"],
+        user_id=user,
         date=data.date,
         stress=data.stress,
         sleep_hours=data.sleep_hours,
@@ -100,7 +100,7 @@ def get_symptoms(
 ):
     logs = (
         db.query(DailyLog)
-        .filter(DailyLog.user_id == user["id"])
+        .filter(DailyLog.user_id == user)
         .order_by(DailyLog.date.desc())
         .all()
     )
@@ -131,14 +131,14 @@ def predict_next_period(
 ):
     cycles = (
         db.query(Cycle)
-        .filter(Cycle.user_id == user["id"])
+        .filter(Cycle.user_id == user)
         .order_by(Cycle.last_period_start.asc())
         .all()
     )
 
     recent_log = (
         db.query(DailyLog)
-        .filter(DailyLog.user_id == user["id"])
+        .filter(DailyLog.user_id == user)
         .order_by(DailyLog.date.desc())
         .first()
     )

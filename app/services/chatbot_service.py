@@ -4,8 +4,9 @@ from openai import OpenAI
 
 load_dotenv()
 
-api_key = os.getenv("OPENROUTER_API_    KEY")
+api_key = os.getenv("OPENROUTER_API_KEY")
 
+print("API Key Loaded:", api_key)
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=api_key,
@@ -58,7 +59,7 @@ User Health Data:
 - Bloating: {log.bloating}
 """
 
-        #  CYCLE DATA (VERY IMPORTANT)
+        #  CYCLE DATA 
         if cycles:
             last_cycles = cycles[-3:] if len(cycles) >= 3 else cycles
             cycle_info = [
@@ -108,10 +109,8 @@ Instructions:
 
 # ------------------ FINAL FUNCTION ---------------------
 def generate_chatbot_reply(message, log, cycles):
-    # rules first 
     rule = rule_based_reply(message, log)
     if rule:
         return rule
 
-    # Otherwise use AI
     return ai_chat_reply(message, log, cycles)

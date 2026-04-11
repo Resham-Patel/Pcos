@@ -1,30 +1,28 @@
+import json
 from app.ml.predict import predict
 from app.models.prediction_model import Prediction
 from app.services.recommendation_service import get_recommendation
 
 def predict_pcos(db, user_id, data):
-    # Step 1: ML Prediction
+    # ML Prediction
     prediction, confidence = predict(data)
 
     result_text = "PCOS Detected" if prediction == 1 else "No PCOS"
 
-    # Step 2: Generate Recommendation
+    # Generate Recommendation
     recommendation = get_recommendation(data, prediction)
 
-    # Step 3: Save to DB
-    import json
-
+    # Save to DB
     record = Prediction(
     user_id=user_id,
     prediction_result=result_text,
     confidence=float(confidence),
     recommendation=json.dumps(recommendation)   
 )
-
     db.add(record)
     db.commit()
 
-    # Step 4: Return response
+    # Return response
     return {
         "prediction": int(prediction),
         "confidence": round(confidence * 100, 2),

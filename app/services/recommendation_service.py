@@ -7,6 +7,7 @@ load_dotenv()
 
 api_key = os.getenv("OPENROUTER_API_KEY")
 
+# OpenAI client
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=api_key,
@@ -22,7 +23,7 @@ def get_value(symptoms, key):
         return symptoms.get(key)
     return getattr(symptoms, key, None)
 
-
+# Risk level calculation
 def get_risk_level(symptoms):
     risk_level = get_value(symptoms, "risk_level")
     if risk_level:
@@ -41,7 +42,7 @@ def get_risk_level(symptoms):
         return "Moderate Risk"
     return "Low Risk"
 
-
+# Rule-based recommendations
 def generate_rules(symptoms, prediction, risk_level):
     rules = []
 
@@ -81,7 +82,7 @@ def generate_rules(symptoms, prediction, risk_level):
 
     return rules
 
-
+# short recommendations based on risk level
 def get_fallback_recommendation(risk_level):
     if risk_level == "High Risk":
         return {
@@ -103,7 +104,7 @@ def get_fallback_recommendation(risk_level):
         "lifestyle": "Keep tracking your cycle, sleep well, manage stress, and continue healthy habits to maintain a lower-risk pattern."
     }
 
-
+# Generate AI Recommendation
 def generate_ai_recommendation(rules, risk_level):
     if not client:
         return get_fallback_recommendation(risk_level)
@@ -160,7 +161,7 @@ Rules:
         print("OpenAI Error:", e)
         return get_fallback_recommendation(risk_level)
 
-
+# Get Recommendations
 def get_recommendation(symptoms, prediction):
     risk_level = get_risk_level(symptoms)
     rules = generate_rules(symptoms, prediction, risk_level)

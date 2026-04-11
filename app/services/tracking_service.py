@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-
+# Adjustment from symptomns log
 def calculate_adjustment(log):
     score = 0
 
@@ -51,7 +51,7 @@ def calculate_adjustment(log):
 
     return score
 
-
+# Next period prediction 
 def predict_next_period_logic(cycles, recent_log):
     if not cycles:
         return {
