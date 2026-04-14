@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from datetime import date, timedelta
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.cycle_model import Cycle
@@ -66,6 +67,24 @@ def save_symptoms(
     db: Session = Depends(get_db),
     user=Depends(get_current_user)
 ):
+    # Find the most recent log for this user
+    latest_log = (
+        db.query(DailyLog)
+        .filter(DailyLog.user_id == user)
+        .order_by(DailyLog.date.desc())
+        .first()
+    )
+
+    if latest_log:
+        # Next allowed date is exactly 7 days after the last log
+        next_allowed_date = latest_log.date + timedelta(days=7)
+
+        if data.date < next_allowed_date:
+            raise HTTPException(
+                status_code=400,
+                detail=f"You already logged this week on {latest_log.date}. Next log allowed from {next_allowed_date}."
+            )
+
     log = DailyLog(
         user_id=user,
         date=data.date,
@@ -136,11 +155,18 @@ def predict_next_period(
         .all()
     )
 
-    recent_log = (
+    if not cycles:
+        return predict_next_period_logic([], [])
+
+    last_period_start = cycles[-1].last_period_start
+
+    logs_since_last_period = (
         db.query(DailyLog)
         .filter(DailyLog.user_id == user)
-        .order_by(DailyLog.date.desc())
-        .first()
+        .filter(DailyLog.date >= last_period_start)
+        .filter(DailyLog.date <= date.today())
+        .order_by(DailyLog.date.asc())
+        .all()
     )
 
-    return predict_next_period_logic(cycles, recent_log)
+    return predict_next_period_logic(cycles, logs_since_last_period)

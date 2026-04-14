@@ -70,8 +70,6 @@ const Awareness = () => {
               <span className="arrow-right">›</span>
             </div>
           </Link>
-
-
         </div>
       </section >
     </div >

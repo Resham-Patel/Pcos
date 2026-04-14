@@ -39,7 +39,7 @@ const TrackingPage = () => {
     bloating: "",
   });
 
-  const today = new Date();
+  const today = useMemo(() => new Date(), []);
 
   useEffect(() => {
     fetchTrackingData();
@@ -74,17 +74,15 @@ const TrackingPage = () => {
 
   const periodLength = latestCycle?.period_length || 5;
 
-  const lastPeriodStart =
-    prediction?.last_period_start
-      ? new Date(prediction.last_period_start)
-      : latestCycle?.last_period_start
-        ? new Date(latestCycle.last_period_start)
-        : null;
+  const lastPeriodStart = useMemo(() => {
+    if (prediction?.last_period_start) return new Date(prediction.last_period_start);
+    if (latestCycle?.last_period_start) return new Date(latestCycle.last_period_start);
+    return null;
+  }, [prediction, latestCycle]);
 
-  const predictedNextPeriodDate =
-    prediction?.predicted_next_period
-      ? new Date(prediction.predicted_next_period)
-      : null;
+  const predictedNextPeriodDate = prediction?.predicted_next_period
+    ? new Date(prediction.predicted_next_period)
+    : null;
 
   const monthLabel = currentMonth.toLocaleString("en-US", {
     month: "long",
@@ -117,7 +115,7 @@ const TrackingPage = () => {
 
   const isSymptomDay = (date) => {
     return symptoms.some((symptom) => {
-      const symptomDate = new Date(symptom.date);
+      const symptomDate = new Date(symptom.log_date || symptom.date);
       return isSameDate(symptomDate, date);
     });
   };
@@ -165,22 +163,27 @@ const TrackingPage = () => {
     return days;
   }, [currentMonth]);
 
-  const nextPeriodStart = useMemo(() => {
-    if (predictedNextPeriodDate) return predictedNextPeriodDate;
-    if (!lastPeriodStart) return null;
+  const logsSinceLastPeriod = useMemo(() => {
+    if (!lastPeriodStart) return [];
 
-    const diff = dayDiff(lastPeriodStart, today);
-    const cyclesPassed = Math.floor(Math.max(diff, 0) / cycleLength);
-    let next = new Date(lastPeriodStart);
+    const start = new Date(lastPeriodStart);
+    start.setHours(0, 0, 0, 0);
 
-    next.setDate(lastPeriodStart.getDate() + (cyclesPassed + 1) * cycleLength);
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
 
-    if (isSameDate(next, today) || next < today) {
-      next.setDate(next.getDate() + cycleLength);
-    }
+    return symptoms
+      .filter((symptom) => {
+        const symptomDate = new Date(symptom.log_date || symptom.date);
+        return symptomDate >= start && symptomDate <= end;
+      })
+      .sort(
+        (a, b) =>
+          new Date(a.log_date || a.date) - new Date(b.log_date || b.date)
+      );
+  }, [symptoms, lastPeriodStart]);
 
-    return next;
-  }, [predictedNextPeriodDate, cycleLength, lastPeriodStart, today]);
+  const nextPeriodStart = predictedNextPeriodDate;
 
   const daysUntilNextPeriod = nextPeriodStart
     ? Math.max(dayDiff(today, nextPeriodStart), 0)
@@ -219,7 +222,10 @@ const TrackingPage = () => {
     const { name, value } = e.target;
     setCycleForm((prev) => ({
       ...prev,
-      [name]: name === "cycle_length" || name === "period_length" ? Number(value) : value,
+      [name]:
+        name === "cycle_length" || name === "period_length"
+          ? Number(value)
+          : value,
     }));
   };
 
@@ -259,32 +265,24 @@ const TrackingPage = () => {
 
   const handleLogSymptoms = async (e) => {
     e.preventDefault();
-
     try {
       await logSymptom(symptomForm);
       await fetchTrackingData();
-
       setSymptomForm({
         date: new Date().toISOString().split("T")[0],
-        stress: "",
-        sleep_hours: "",
-        exercise_days: "",
-        fatigue: "",
-        mood: "",
-        acne: "",
-        sugar_intake: "",
-        junk_food: "",
-        water_intake: "",
-        bloating: "",
+        stress: "", sleep_hours: "", exercise_days: "",
+        fatigue: "", mood: "", acne: "", sugar_intake: "",
+        junk_food: "", water_intake: "", bloating: "",
       });
-
       setShowSymptomForm(false);
-      alert("Health log saved successfully");
+      alert("Weekly health log saved successfully");
     } catch (err) {
-      console.log("Log symptom error:", err);
-      alert("Failed to save health log");
+      // Show the specific message from backend
+      const message = err.response?.data?.detail || "Failed to save health log";
+      alert(message);
     }
   };
+
 
   return (
     <div className="tracking-page">
@@ -293,7 +291,7 @@ const TrackingPage = () => {
           <h1>Cycle Tracking</h1>
           <p>
             Your cycle is in the <span>{cyclePhase}</span>. Prediction is based on
-            your cycle history and latest health log.
+            your last 3 cycle records and all health logs from your last period till today.
           </p>
         </section>
 
@@ -351,11 +349,16 @@ const TrackingPage = () => {
               <div className="small-icon">🩸</div>
               <p className="label">Next Period</p>
 
-              <h2>{cycles.length >= 3 && daysUntilNextPeriod !== null ? `${daysUntilNextPeriod} Days` : "--"}</h2>
+              <h2>
+                {prediction?.predicted_next_period && daysUntilNextPeriod !== null
+                  ? `${daysUntilNextPeriod} Days`
+                  : "--"}
+              </h2>
 
               <p className="sub-label">
-                Predicted: {cycles.length >= 3 ? formattedNextPeriod : "--"}
+                Predicted: {prediction?.predicted_next_period ? formattedNextPeriod : "--"}
               </p>
+
               {cycles.length < 3 && (
                 <p className="sub-label disclaimer-text">
                   Please add at least 3 cycle records to enable prediction.
@@ -366,8 +369,8 @@ const TrackingPage = () => {
                 <p className="sub-label">{prediction.message}</p>
               )}
 
-              {prediction?.message && (
-                <p className="sub-label">{prediction.message}</p>
+              {prediction?.logs_used !== undefined && (
+                <p className="sub-label">Logs used: {prediction.logs_used}</p>
               )}
 
               {prediction?.base_cycle_length && (
@@ -390,7 +393,7 @@ const TrackingPage = () => {
                   className="primary-btn"
                   onClick={() => setShowSymptomForm(true)}
                 >
-                  Log Health
+                  Log Weekly Health
                 </button>
               </div>
             </div>
@@ -456,7 +459,7 @@ const TrackingPage = () => {
         {showSymptomForm && (
           <section className="card symptom-form-card">
             <div className="section-header">
-              <h2>Enter Health Log</h2>
+              <h2>Enter Weekly Health Log</h2>
             </div>
 
             <form onSubmit={handleLogSymptoms} className="symptom-form">
@@ -468,6 +471,7 @@ const TrackingPage = () => {
                   value={symptomForm.date}
                   onChange={handleSymptomChange}
                   required
+                  max={new Date().toISOString().split("T")[0]}
                 />
               </div>
 
@@ -607,7 +611,7 @@ const TrackingPage = () => {
 
               <div className="form-actions">
                 <button type="submit" className="primary-btn">
-                  Save Health Log
+                  Save Weekly Health Log
                 </button>
                 <button
                   type="button"
@@ -630,9 +634,7 @@ const TrackingPage = () => {
             <div className="metric-card">
               <div className="metric-top">
                 <div className="metric-icon">📅</div>
-                <span className="green-badge">
-                  {cycles.length} Records
-                </span>
+                <span className="green-badge">{cycles.length} Records</span>
               </div>
               <p className="metric-title">Cycle History</p>
               <h3>{cycleLength}d</h3>
@@ -642,11 +644,11 @@ const TrackingPage = () => {
               <div className="metric-top">
                 <div className="metric-icon">🩺</div>
                 <span className="pink-badge">
-                  {symptoms.length} Logs
+                  {logsSinceLastPeriod.length} Logs
                 </span>
               </div>
-              <p className="metric-title">Health Logs</p>
-              <h3>{prediction?.adjustment_score ?? 0}</h3>
+              <p className="metric-title">Logs Since Last Period</p>
+              <h3>{logsSinceLastPeriod.length}</h3>
             </div>
 
             <div className="metric-card">
@@ -666,27 +668,30 @@ const TrackingPage = () => {
           </div>
 
           <div className="symptoms-row">
-            {symptoms.length > 0 ? (
-              symptoms.slice(0, 4).map((log) => (
-                <div className="symptom-pill" key={log.id}>
-                  <div className="symptom-icon pink-lite">HL</div>
-                  <div>
-                    <h4>{new Date(log.date).toDateString()}</h4>
-                    <p>
-                      {[
-                        log.stress && `Stress: ${log.stress}`,
-                        log.fatigue && `Fatigue: ${log.fatigue}`,
-                        log.mood && `Mood: ${log.mood}`,
-                        log.sugar_intake && `Sugar: ${log.sugar_intake}`,
-                      ]
-                        .filter(Boolean)
-                        .join(" • ") || "Health log saved"}
-                    </p>
+            {logsSinceLastPeriod.length > 0 ? (
+              logsSinceLastPeriod
+                .slice(-4)
+                .reverse()
+                .map((log, index) => (
+                  <div className="symptom-pill" key={log.id || index}>
+                    <div className="symptom-icon pink-lite">HL</div>
+                    <div>
+                      <h4>{new Date(log.log_date || log.date).toDateString()}</h4>
+                      <p>
+                        {[
+                          log.stress && `Stress: ${log.stress}`,
+                          log.fatigue && `Fatigue: ${log.fatigue}`,
+                          log.mood && `Mood: ${log.mood}`,
+                          log.sugar_intake && `Sugar: ${log.sugar_intake}`,
+                        ]
+                          .filter(Boolean)
+                          .join(" • ") || "Health log saved"}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))
+                ))
             ) : (
-              <p>No health logs yet.</p>
+              <p>No health logs since last period yet.</p>
             )}
           </div>
         </section>
@@ -696,9 +701,9 @@ const TrackingPage = () => {
             <div className="guide-text">
               <h2>Personalized PCOS Guide</h2>
               <p>
-                Based on your cycle history and latest health condition, your next
-                period estimate is dynamically adjusted instead of using only a fixed
-                28-day cycle.
+                Based on your cycle history and health logs since your last period,
+                your next period estimate is dynamically adjusted instead of using
+                only a fixed 28-day cycle.
               </p>
             </div>
 
