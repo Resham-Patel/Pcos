@@ -2,7 +2,4 @@ __pycache__/
 node_modules/
 venv/
 *.pyc
-*.pkl
-*.csv
-*.xlsx
 .env
