@@ -4,9 +4,9 @@ import "../styles/mythVsFact_awareness.css";
 
 const MythVsFactAwareness = () => {
     const navigate = useNavigate();
+    const isLoggedIn = !!localStorage.getItem("token");
     return (
         <div className="myth-page">
-            {/* HERO */}
             <section className="myth-hero">
                 <div className="myth-hero-badge">AWARENESS GUIDE</div>
                 <h1>Myth vs Fact</h1>
@@ -17,7 +17,6 @@ const MythVsFactAwareness = () => {
                 </p>
             </section>
 
-            {/* INTRO */}
             <section className="myth-section">
                 <div className="section-heading">
                     <h2>Why myths matter</h2>
@@ -29,7 +28,6 @@ const MythVsFactAwareness = () => {
                 </div>
             </section>
 
-            {/* MYTH FACT CARDS */}
             <section className="myth-section">
                 <div className="section-heading">
                     <h2>Common myths and facts</h2>
@@ -145,7 +143,6 @@ const MythVsFactAwareness = () => {
                 </div>
             </section>
 
-            {/* QUICK REMEMBER */}
             <section className="myth-section">
                 <div className="section-heading">
                     <h2>What to remember</h2>
@@ -173,23 +170,25 @@ const MythVsFactAwareness = () => {
                 </div>
             </section>
 
-            {/* CTA */}
-            <section className="myth-cta">
-                <div className="myth-cta-content">
-                    <div className="myth-cta-badge">NEXT STEP</div>
-                    <h2>Want deeper, more personalized support?</h2>
-                    <p>
-                        Log in to explore prediction, recommendations, and tracking features
-                        designed to support your PCOS wellness journey.
-                    </p>
-                    <button
-                        className="myth-primary-btn"
-                        onClick={() => navigate("/login")}
-                    >
-                        Explore More (Login Required)
-                    </button>
-                </div>
-            </section>
+            {/*CTA*/}
+            {!isLoggedIn && (
+                <section className="myth-cta">
+                    <div className="myth-cta-content">
+                        <div className="myth-cta-badge">NEXT STEP</div>
+                        <h2>Want deeper, more personalized support?</h2>
+                        <p>
+                            Log in to explore prediction, recommendations, and tracking features
+                            designed to support your PCOS wellness journey.
+                        </p>
+                        <button
+                            className="myth-primary-btn"
+                            onClick={() => navigate("/login")}
+                        >
+                            Explore More (Login Required)
+                        </button>
+                    </div>
+                </section>
+            )}
         </div>
     );
 };

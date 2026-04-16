@@ -6,7 +6,6 @@ const HormoneBalanceAwareness = () => {
     const navigate = useNavigate();
     return (
         <div className="hormone-page">
-            {/* HERO */}
             <section className="hormone-hero">
                 <div className="hormone-hero-badge">AWARENESS GUIDE</div>
                 <h1>Hormone Balance for PCOS</h1>
@@ -16,7 +15,6 @@ const HormoneBalanceAwareness = () => {
                 </p>
             </section>
 
-            {/* PILLARS */}
             <section className="hormone-section">
                 <div className="section-heading">
                     <h2>Core pillars of hormone balance</h2>
@@ -65,7 +63,6 @@ const HormoneBalanceAwareness = () => {
                 </div>
             </section>
 
-            {/* DO VS AVOID */}
             <section className="hormone-section">
                 <div className="section-heading">
                     <h2>Helpful habits vs common challenges</h2>
@@ -100,7 +97,6 @@ const HormoneBalanceAwareness = () => {
                 </div>
             </section>
 
-            {/* KEY INSIGHT */}
             <section className="hormone-section">
                 <div className="insight-highlight">
                     <div className="insight-mini-badge">KEY INSIGHT</div>
@@ -124,9 +120,17 @@ const HormoneBalanceAwareness = () => {
                     </p>
                     <button
                         className="hormone-primary-btn"
-                        onClick={() => navigate("/login")}
+                        onClick={() => {
+                            const token = localStorage.getItem("token");
+
+                            if (token) {
+                                navigate("/predict"); 
+                            } else {
+                                navigate("/login");
+                            }
+                        }}
                     >
-                        Get Recommendations (Login Required)
+                        Get Recommendations
                     </button>
                 </div>
             </section>

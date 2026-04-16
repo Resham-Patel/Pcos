@@ -7,7 +7,6 @@ const SymptomPageAwareness = () => {
     const navigate = useNavigate();
     return (
         <div className="symptoms-page">
-            {/* HERO */}
             <section className="symptoms-hero">
                 <div className="symptoms-hero-badge">AWARENESS GUIDE</div>
                 <h1>Understanding PCOS Symptoms</h1>
@@ -17,7 +16,6 @@ const SymptomPageAwareness = () => {
                 </p>
             </section>
 
-            {/* SYMPTOMS GRID */}
             <section className="symptoms-section">
                 <div className="section-heading">
                     <h2>Common Symptoms</h2>
@@ -84,7 +82,6 @@ const SymptomPageAwareness = () => {
                 </div>
             </section>
 
-            {/* CAUSES */}
             <section className="symptoms-section">
                 <div className="section-heading">
                     <h2>Why do these symptoms happen?</h2>
@@ -133,9 +130,17 @@ const SymptomPageAwareness = () => {
                     </p>
                     <button
                         className="symptoms-primary-btn"
-                        onClick={() => navigate("/login")}
+                        onClick={() => {
+                            const token = localStorage.getItem("token");
+
+                            if (token) {
+                                navigate("/predict");
+                            } else {
+                                navigate("/login");
+                            }
+                        }}
                     >
-                        Predict Now (Login Required)
+                        Predict Now
                     </button>
                 </div>
             </section>

@@ -22,8 +22,8 @@ const ForgotPassword = () => {
     } catch (err) {
       setError(
         err.response?.data?.detail ||
-          err.response?.data?.message ||
-          "Failed to send reset link."
+        err.response?.data?.message ||
+        "Failed to send reset link."
       );
     } finally {
       setLoading(false);
@@ -59,7 +59,10 @@ const ForgotPassword = () => {
         </form>
 
         <p className="bottom-link">
-          Remembered your password? <Link to="/login">Back to Login</Link>
+          Remembered your password?
+          <Link to="/login">
+            Back to Login
+          </Link>
         </p>
       </div>
     </div>

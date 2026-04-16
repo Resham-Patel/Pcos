@@ -7,7 +7,6 @@ const ExerciseGuideAwareness = () => {
     const navigate = useNavigate();
     return (
         <div className="exercise-page">
-            {/* HERO */}
             <section className="exercise-hero">
                 <div className="exercise-hero-badge">AWARENESS GUIDE</div>
                 <h1>Exercise Guide for PCOS</h1>
@@ -18,7 +17,6 @@ const ExerciseGuideAwareness = () => {
                 </p>
             </section>
 
-            {/* WHY IT HELPS */}
             <section className="exercise-section">
                 <div className="section-heading">
                     <h2>Why movement matters</h2>
@@ -58,7 +56,6 @@ const ExerciseGuideAwareness = () => {
                 </div>
             </section>
 
-            {/* ROUTINE TYPES */}
             <section className="exercise-section">
                 <div className="section-heading">
                     <h2>Beginner-friendly routines</h2>
@@ -122,9 +119,17 @@ const ExerciseGuideAwareness = () => {
                     </p>
                     <button
                         className="exercise-primary-btn"
-                        onClick={() => navigate("/login")}
+                        onClick={() => {
+                            const token = localStorage.getItem("token");
+
+                            if (token) {
+                                navigate("/tracking"); 
+                            } else {
+                                navigate("/login");
+                            }
+                        }}
                     >
-                        Track Your Progress (Login Required)
+                        Track Your Progress
                     </button>
                 </div>
             </section>

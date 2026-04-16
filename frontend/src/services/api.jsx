@@ -19,7 +19,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-//  AUTH APIs
+//  AUTH API
 export const loginUser = (data) => api.post("/login", data);
 export const registerUser = (data) => api.post("/register", data);
 export const forgotPassword = (data) => api.post("/forgot-password", data);

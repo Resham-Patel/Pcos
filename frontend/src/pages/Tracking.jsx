@@ -277,7 +277,6 @@ const TrackingPage = () => {
       setShowSymptomForm(false);
       alert("Weekly health log saved successfully");
     } catch (err) {
-      // Show the specific message from backend
       const message = err.response?.data?.detail || "Failed to save health log";
       alert(message);
     }

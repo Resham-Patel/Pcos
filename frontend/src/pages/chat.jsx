@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../styles/chatbot.css";
 
-import { sendMessage } from "../services/api"; // ✅ FIXED
+import { sendMessage } from "../services/api"; 
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([
@@ -25,10 +25,10 @@ const Chatbot = () => {
     setLoading(true);
 
     try {
-      const res = await sendMessage(input); // ✅ FIXED
+      const res = await sendMessage(input);
 
       const botMessage = {
-        text: res.data.reply, // make sure backend sends { reply: "..." }
+        text: res.data.reply,
         sender: "bot",
       };
 

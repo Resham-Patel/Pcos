@@ -30,7 +30,6 @@ const Login = () => {
 
       dispatch(loginSuccess({ token }));
 
-      // ✅ ADD THIS BLOCK
       const existingUser = JSON.parse(localStorage.getItem("user")) || {};
 
       localStorage.setItem(
