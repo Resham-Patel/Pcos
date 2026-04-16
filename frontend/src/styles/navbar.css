@@ -1,4 +1,3 @@
-/* --- Global Reset --- */
 * {
   margin: 0;
   padding: 0;
@@ -10,13 +9,12 @@ body {
   background-color: #ffffff;
 }
 
-/* --- Professional Glass Navbar --- */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 8%;
-  background-color: rgba(252, 228, 236, 0.85); /* Light blush pink from image */
+  background-color: rgba(252, 228, 236, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   position: sticky;

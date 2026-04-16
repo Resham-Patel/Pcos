@@ -35,7 +35,7 @@
   max-width: 75%;
   padding: 12px 16px;
   border-radius: 16px;
-  font-size: 15px;   /* slightly bigger */
+  font-size: 15px;   
   line-height: 1.6;
   word-wrap: break-word;
 }
@@ -43,14 +43,14 @@
 /* Bot message */
 .message.bot {
   background: #f5f4f7;
-  color: #333;   /* FIXED (was looking white/faded) */
+  color: #333;   
   align-self: flex-start;
 }
 
 /* User message */
 .message.user {
   background: linear-gradient(180deg, #ff2b7a, #cf0057);
-  color: #fff;   /* keep white here */
+  color: #fff;  
   align-self: flex-end;
 }
 
@@ -76,7 +76,7 @@
   background: #f5f4f7;
   outline: none;
   font-size: 14px;
-  color: #333;   /* FIX */
+  color: #333;   
   align-items: left;
 }
 

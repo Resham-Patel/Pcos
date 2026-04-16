@@ -235,7 +235,7 @@
   box-shadow: 0 16px 30px rgba(207, 0, 87, 0.3);
 }
 
-/* RESPONSIVE */
+
 @media (max-width: 1024px) {
   .myth-grid {
     grid-template-columns: 1fr;

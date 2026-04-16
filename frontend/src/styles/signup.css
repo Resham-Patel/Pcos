@@ -1,7 +1,6 @@
-/* Container and Layout */
 .auth-page-wrapper {
   min-height: 100vh;
-  background: #fdf5f7; /* Very soft pink background */
+  background: #fdf5f7; 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,20 +18,19 @@
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
 }
 
-/* Left Visual Side (Branding) */
 .auth-visual {
   flex: 1.2;
   position: relative;
   padding: 60px;
   display: flex;
   flex-direction: column;
-  background-color: #c94c72; /* Your primary brand pink */
-  color: white; /* Changed to white for contrast against pink bg */
+  background-color: #c94c72; 
+  color: white;
   
 }
 
 .brand-name {
-  color: white; /* Contrast update */
+  color: white;
   font-weight: 800;
   font-size: 2.5rem;
   margin-top: 20px;
@@ -75,12 +73,11 @@
 .avatar-group img {
   width: 32px; height: 32px;
   border-radius: 50%;
-  border: 2px solid #c94c72; /* Matches background */
+  border: 2px solid #c94c72;
   margin-left: -10px;
 }
 .avatar-group img:first-child { margin-left: 0; }
 
-/* Right Form Side */
 .auth-form-side {
   flex: 1;
   padding: 60px 60px;
@@ -90,7 +87,7 @@
 
 .form-container { 
   width: 100%; 
-  text-align: left; /* Ensures global left alignment */
+  text-align: left;
 }
 
 .form-container h2 {
@@ -107,19 +104,17 @@
   font-size: 1rem;
 }
 
-/* Input Fields & Left Aligned Labels */
 .input-field { 
   margin-bottom: 25px; 
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Forces labels to left */
+  align-items: flex-start;
 }
 
 .input-field label {
   display: block;
   font-size: 0.85rem;
   font-weight: 700;
-  /* color: #444; */
   margin-bottom: 10px;
   text-align: left;
    color: #1a1a1a;
@@ -159,11 +154,10 @@
   text-decoration: none; 
 }
 
-/* Button & Actions */
 .btn-enter {
   width: 100%;
   padding: 18px;
-  background: #a32a53; /* Deep berry pink */
+  background: #a32a53; 
   color: white;
   border: none;
   border-radius: 100px;
@@ -215,14 +209,13 @@
 .social-btn:hover { background: #eaedf2; }
 
 .switch-auth { 
-  text-align: center; /* Better balanced centered under form */
+  text-align: center; 
   margin-top: 35px; 
   font-size: 0.9rem; 
   color: #666; 
 }
 .switch-auth a { color: #c94c72; font-weight: 800; text-decoration: none; }
 
-/* Global Footer */
 .auth-footer {
   margin-top: 40px;
   width: 100%;
@@ -237,7 +230,6 @@
 .footer-links a { text-decoration: none; color: inherit; transition: 0.2s; }
 .footer-links a:hover { color: #c94c72; }
 
-/* Responsive */
 @media (max-width: 900px) {
   .auth-card { flex-direction: column; border-radius: 20px; }
   .auth-visual { display: none; } 

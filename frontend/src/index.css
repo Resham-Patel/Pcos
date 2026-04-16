@@ -55,10 +55,9 @@ body {
 }
 
 #root {
-  width: 100%; /* Change from 1126px to 100% */
+  width: 100%; 
   margin: 0;
   text-align: center;
-  /* Remove border-inline if you don't want those side lines */
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -94,27 +93,17 @@ p {
   margin: 0;
 }
 
-code,
-.counter {
+code{
   font-family: var(--mono);
   display: inline-flex;
   border-radius: 4px;
   color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
+   font-size: 15px;
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
 }
 
-.app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
 .main-content {
-  flex: 1; /* Pushes footer to the bottom on every page */
+  flex: 1; 
 }

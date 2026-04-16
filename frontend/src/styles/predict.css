@@ -1,4 +1,3 @@
-/* --- Predict Page Container --- */
 * {
   margin: 0;
   padding: 0;
@@ -14,7 +13,6 @@
   min-height: 100vh;
 }
 
-/* --- Header Section --- */
 .predict-header {
   text-align: center;
   padding-bottom: 60px;
@@ -44,7 +42,6 @@
   margin: 0 auto;
 }
 
-/* --- The Form Card --- */
 .form-card {
   background: #ffffff;
   border: 1px solid #eeeeee;
@@ -68,7 +65,6 @@
   color: #1a1a1a;
 }
 
-/* --- Input Grid (Vital Metrics) --- */
 .input-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -116,7 +112,6 @@
   cursor: not-allowed;
 }
 
-/* --- Toggle Groups (Clinical & Lifestyle) --- */
 .toggle-grid,
 .toggle-list {
   display: flex;
@@ -144,7 +139,6 @@
   color: #444;
 }
 
-/* --- Modern Toggle Switch --- */
 .switch {
   position: relative;
   display: inline-block;
@@ -192,7 +186,6 @@ input:checked + .slider:before {
   transform: translateX(22px);
 }
 
-/* --- Submit Button --- */
 .predict-btn {
   width: 100%;
   padding: 20px;
@@ -213,7 +206,7 @@ input:checked + .slider:before {
   transform: translateY(-2px);
 }
 
-/* --- Results Section --- */
+
 .results-wrapper {
   display: flex;
   flex-direction: column;
@@ -339,7 +332,7 @@ input:checked + .slider:before {
   color: #15803d;
 }
 
-/* --- Suggestions --- */
+
 .suggestions-title {
   font-size: 1rem;
   font-weight: 700;
@@ -366,7 +359,7 @@ input:checked + .slider:before {
   flex-shrink: 0;
 }
 
-/* --- Premium Recommendation CTA --- */
+
 .recommendation-cta {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
@@ -433,7 +426,6 @@ input:checked + .slider:before {
   max-width: 450px;
 }
 
-/* --- Premium Action Button --- */
 .view-rec-btn {
   position: relative;
   z-index: 1;
@@ -468,7 +460,6 @@ input:checked + .slider:before {
   transform: translateX(8px);
 }
 
-/* --- Understanding PCOS Section --- */
 .info-card {
   background: linear-gradient(to bottom, #fff5f7, #ffffff);
   border-radius: 28px;
@@ -521,7 +512,6 @@ input:checked + .slider:before {
   text-align: left;
 }
 
-/* --- Mobile Adjustments --- */
 @media (max-width: 768px) {
   .predict-container {
     padding: 24px 16px 50px 16px;
