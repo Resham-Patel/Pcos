@@ -43,7 +43,6 @@ def ai_chat_reply(message, log, cycles):
     try:
         context = ""
 
-        #  FULL HEALTH LOG
         if log:
             context += f"""
 User Health Data:
@@ -58,8 +57,7 @@ User Health Data:
 - Water Intake: {log.water_intake}
 - Bloating: {log.bloating}
 """
-
-        #  CYCLE DATA 
+ 
         if cycles:
             last_cycles = cycles[-3:] if len(cycles) >= 3 else cycles
             cycle_info = [
@@ -73,7 +71,6 @@ Cycle History:
 - Recent Cycles: {cycle_info}
 """
 
-        #  FINAL PROMPT
         prompt = f"""
 You are a smart PCOS health assistant.
 

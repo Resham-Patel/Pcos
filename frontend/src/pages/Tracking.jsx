@@ -1,12 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "../styles/tracking.css";
-import {
-  getCycles,
-  saveCycle,
-  getSymptoms,
-  logSymptom,
-  getPrediction,
-} from "../services/api";
+import { getCycles, saveCycle, getSymptoms, logSymptom, getPrediction } from "../services/api";
 
 const TrackingPage = () => {
   const [cycles, setCycles] = useState([]);
