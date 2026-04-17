@@ -151,7 +151,7 @@ Rules:
                 }
             ],
             temperature=0.5,
-            max_tokens=250
+            max_tokens=300,
         )
 
         content = response.choices[0].message.content.strip()
