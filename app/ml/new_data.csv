@@ -1,4 +1,4 @@
-PCOS (Y/N), Age (yrs),Weight (Kg),Height(Cm) ,Cycle(R/I),Cycle length(days),Weight gain(Y/N),hair growth(Y/N),Skin darkening (Y/N),Hair loss(Y/N),Pimples(Y/N),Fast food (Y/N),Reg.Exercise(Y/N)
+PCOS (Y/N),Age (yrs),Weight (Kg),Height(Cm),Cycle(R/I),Cycle length(days),Weight gain(Y/N),hair growth(Y/N),Skin darkening (Y/N),Hair loss(Y/N),Pimples(Y/N),Fast food (Y/N),Reg.Exercise(Y/N)
 0,20,71.0,163.0,2,5,0,0,0,0,0,0.0,0
 0,20,68.0,152.0,4,3,0,0,0,0,0,0.0,0
 0,20,74.0,171.0,4,0,0,0,0,0,0,0.0,0
