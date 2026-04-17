@@ -46,7 +46,7 @@ The **FemWell - PCOS Support System** is a full-stack web application designed t
 ### Backend Setup
 
 ```bash
-cd backend
+cd app
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
