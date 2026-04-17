@@ -54,7 +54,6 @@ def calculate_adjustment_from_logs(logs):
 
         total_score += log_score
     # return total_score
-    # Use total score directly instead of averaging
     if total_score <= 2:
         return 0
     elif total_score <= 5:
