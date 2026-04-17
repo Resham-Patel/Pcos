@@ -29,11 +29,9 @@ The **FemWell - PCOS Support System** is a full-stack web application designed t
 ### Cycle & Health Tracking
 
 * Users can:
-
   * Add menstrual cycle records
   * Log weekly health data (stress, sleep, mood, etc.)
 * Calendar-based visualization of:
-
   * Period days
   * Logged symptoms
 * Tracks logs from **last period till current date**
