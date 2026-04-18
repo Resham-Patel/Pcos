@@ -29,7 +29,7 @@ const Dashboard = () => {
       title: "Recommendations",
       desc: "Diet, exercise & lifestyle guidance",
       icon: <ClipboardList size={20} />,
-      path: "/recommendations",
+      path: "/predict",
     },
     {
       title: "AI Chat Support",
